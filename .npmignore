@@ -1,0 +1,24 @@
+# Development files
+.git/
+.gitignore
+.legacy/
+backup-*/
+node_modules/
+
+# Test files
+test-*.html
+
+# Internal documentation
+V1.2.0-COMPLETION-REPORT.md
+
+# Metadata files
+metadata-*.json
+
+# macOS
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo

@@ -1,0 +1,60 @@
+{
+  "name": "@monolex/codexmono",
+  "version": "1.0.1",
+  "description": "Professional monospace Variable Font for multilingual development - Latin, Korean, Japanese, Chinese with perfect CJK support",
+  "main": "index.js",
+  "bin": {
+    "codexmono": "./bin/cli.js"
+  },
+  "files": [
+    "fonts/",
+    "README.md",
+    "postinstall.js",
+    "index.js",
+    "bin/",
+    "css/",
+    "licenses/",
+    "docs/"
+  ],
+  "keywords": [
+    "font",
+    "typeface",
+    "monospace",
+    "variable-font",
+    "cjk",
+    "korean",
+    "japanese",
+    "chinese",
+    "programming-font",
+    "code-font",
+    "terminal-font",
+    "jetbrains-mono",
+    "pretendard",
+    "noto-sans"
+  ],
+  "author": "NIIA of Monolex.ai",
+  "license": "OFL-1.1",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/monolex/codexmono.git"
+  },
+  "bugs": {
+    "url": "https://github.com/monolex/codexmono/issues"
+  },
+  "homepage": "https://monolex.ai/with/codexmono",
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=12"
+  },
+  "scripts": {
+    "postinstall": "node postinstall.js",
+    "prepublishOnly": "git diff-index --quiet HEAD || (echo 'Error: Working directory is not clean' && exit 1)",
+    "version": "git add -A",
+    "postversion": "git push && git push --tags",
+    "release:patch": "npm version patch && npm publish",
+    "release:minor": "npm version minor && npm publish",
+    "release:major": "npm version major && npm publish"
+  }
+}

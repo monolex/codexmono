@@ -1,0 +1,48 @@
+# CodexMono Font Project - .gitignore
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+
+# Windows
+Thumbs.db
+Desktop.ini
+$RECYCLE.BIN/
+
+# Linux
+*~
+.directory
+
+# Python
+__pycache__/
+*.pyc
+*.log
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+
+# Temps
+*.tmp
+*.bak
+
+# npm
+package-lock.json
+*.tgz
+
+# Legacy fonts - old versions
+.legacy/
+
+# Test files
+tests/
+
+# Keep final fonts and docs
+!*.ttf
+!*.woff
+!*.woff2
+!*.md
+!*.txt
+!*.json
