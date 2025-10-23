@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodexMono.ttf - All 4,007 Characters Test</title>
+    <style>
+        @font-face {
+            font-family: 'CodexMono';
+            src: url('CodexMono.ttf') format('truetype');
+            font-weight: 100 800;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'CodexMono', monospace;
+            background: #1a1a1a;
+            color: #e0e0e0;
+            padding: 40px;
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(102, 126, 234, 0.3);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .header p {
+            font-size: 16px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .controls {
+            background: #2a2a2a;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid #3a3a3a;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-group label {
+            font-weight: 500;
+            min-width: 100px;
+            color: #aaa;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            min-width: 200px;
+            height: 6px;
+            background: #3a3a3a;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #667eea;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: #667eea;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .value-display {
+            min-width: 80px;
+            text-align: right;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        select {
+            padding: 8px 12px;
+            background: #3a3a3a;
+            color: #e0e0e0;
+            border: 1px solid #4a4a4a;
+            border-radius: 4px;
+            font-family: inherit;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .category {
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+            transition: all 0.3s ease;
+        }
+
+        .category:hover {
+            border-color: #667eea;
+            box-shadow: 0 4px 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #3a3a3a;
+        }
+
+        .category-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .category-count {
+            background: #3a3a3a;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            color: #aaa;
+        }
+
+        .char-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+            font-variant-ligatures: none;
+        }
+
+        .char-item {
+            background: #333;
+            padding: 12px;
+            text-align: center;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+            position: relative;
+            border: 1px solid transparent;
+            min-height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .char-item:hover {
+            background: #3a3a3a;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .char-item:hover::after {
+            content: attr(data-code);
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            white-space: nowrap;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+
+        .stats {
+            background: #2a2a2a;
+            border: 1px solid #3a3a3a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stats h3 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-item {
+            background: #333;
+            padding: 15px;
+            border-radius: 6px;
+        }
+
+        .stat-label {
+            color: #aaa;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #667eea;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CodexMono.ttf - Complete Character Test</h1>
+        <p>Total: 4,007 Characters | Variable Font (Weight 100-800) | Monospace: 600/1200/1800</p>
+    </div>
+
+    <div class="stats">
+        <h3>Font Statistics</h3>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-label">Total Characters</div>
+                <div class="stat-value">4,007</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Total Glyphs</div>
+                <div class="stat-value">4,813</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">File Size</div>
+                <div class="stat-value">663 KB</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Variable Font</div>
+                <div class="stat-value">100%</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <label>Font Size:</label>
+            <input type="range" id="fontSize" min="12" max="96" value="24">
+            <span class="value-display" id="fontSizeValue">24px</span>
+        </div>
+        <div class="control-group">
+            <label>Font Weight:</label>
+            <input type="range" id="fontWeight" min="100" max="800" step="100" value="400">
+            <span class="value-display" id="fontWeightValue">400</span>
+        </div>
+        <div class="control-group">
+            <label>Filter Category:</label>
+            <select id="categoryFilter">
+                <option value="all">All Categories</option>
+            </select>
+        </div>
+    </div>
+
+    <div id="charContainer"></div>
+
+    <script>
+        // 폰트 로드 확인
+        document.fonts.ready.then(() => {
+            console.log('CodexMono font loaded successfully');
+        });
+
+        // 실제 폰트에서 추출한 문자 데이터
+        const charData = {"Arrows":"←↑→↓↔↕↖↗↘↙↜↝↞↠↢↣↤↥↦↧↩↪↭↾⇉⇐⇑⇒⇓⇔⇚⇛⇞⇟⇥⇦⇧⇨⇪","Basic Latin":" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~","Block Elements":"▀▁▂▃▄▅▆▇█▉▊▋▌▍▎▏▐░▒▓▔▕▖▗▘▙▚▛▜▝▞▟","Box Drawing":"─━│┃┄┅┆┇┈┉┊┋┌┍┎┏┐┑┒┓└┕┖┗┘┙┚┛├┝┞┟┠┡┢┣┤┥┦┧┨┩┪┫┬┭┮┯┰┱┲┳┴┵┶┷┸┹┺┻┼┽┾┿╀╁╂╃╄╅╆╇╈╉╊╋╌╍╎╏═║╒╓╔╕╖╗╘╙╚╛╜╝╞╟╠╡╢╣╤╥╦╧╨╩╪╫╬╭╮╯╰╱╲╳╴╵╶╷╸╹╺╻╼╽╾╿","Cyrillic":"ЀЁЂЃЄЅІЇЈЉЊЋЌЍЎЏАБВГДЕЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдежзийклмнопрстуфхцчшщъыьэюяѐёђѓєѕіїјљњћќѝўџѠѡѢѣѤѥѦѧѨѩѪѫѬѭѮѯѰѱѲѳѴѵѶѷѸѹѺѻѼѽѾѿҀҁ҂҃҄҅҆҇҈҉ҊҋҌҍҎҏҐґҒғҔҕҖҗҘҙҚқҜҝҞҟҠҡҢңҤҥҦҧҨҩҪҫҬҭҮүҰұҲҳҴҵҶҷҸҹҺһҼҽҾҿӀӁӂӃӄӅӆӇӈӉӊӋӌӍӎӏӐӑӒӓӔӕӖӗӘәӚӛӜӝӞӟӠӡӢӣӤӥӦӧӨөӪӫӬӭӮӯӰӱӲӳӴӵӶӷӸӹӺӻӼӽӾӿ","Dingbats":"✓✕✗✶❘❙❚❮❯❰❱❶❷❸❹❺❻❼❽❾❿➔➜➝➞","Enclosed Alphanumerics":"①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳⑴⑵⒜⒝⒞⒟⒠⒡⒢⒣⒤⒥⒦⒧⒨⒩⒪⒫⒬⒭⒮⒯⒰⒱⒲⒳⒴⒵ⒶⒷⒸⒹⒺⒻⒼⒽⒾⒿⓀⓁⓂⓃⓄⓅⓆⓇⓈⓉⓊⓋⓌⓍⓎⓏⓐⓑⓒⓓⓔⓕⓖⓗⓘⓙⓚⓛⓜⓝⓞⓟⓠⓡⓢⓣⓤⓥⓦⓧⓨⓩ⓪⓫⓬⓭⓮⓯⓰⓱⓲⓳⓴⓵⓶⓷⓸⓹⓺⓻⓼⓽⓾⓿","General Punctuation":"           ​‌‍‎‏‐‑‒–—―‖‗''‚‛\"\"„‟†‡•‣․‥…‧  ‪‫‬‭‮ ‰‱′″‴‵‶‷‸‹›※‼‽‾‿⁀⁁⁂⁃⁄⁅⁆⁇⁈⁉⁊⁋⁌⁍⁎⁏⁐⁑⁒⁓⁔⁕⁖⁗⁘⁙⁚⁛⁜⁝⁞ ⁠⁡⁢⁣⁤⁦⁧⁨⁩⁪⁫⁬⁭⁮⁯","Geometric Shapes":"■□▢▣▤▥▦▧▨▩▪▫▬▭▮▯▰▱▲△▴▵▶▷▸▹►▻▼▽▾▿◀◁◂◃◄◅◆◇◈◉◊○◌◍◎●◐◑◒◓◔◕◖◗◘◙◚◛◜◝◞◟◠◡◢◣◤◥◦◧◨◩◪◫◬◭◮◯◰◱◲◳◴◵◶◷◸◹◺◻◼◽◾◿","Greek":"ͰͱͲͳʹ͵Ͷͷͺͻͼͽ;Ϳ΄΅Ά·ΈΉΊΌΎΏΐΑΒΓΔΕΖΗΘΙΚΛΜΝΞΟΠΡΣΤΥΦΧΨΩΪΫάέήίΰαβγδεζηθικλμνξοπρςστυφχψωϊϋόύώϏϐϑϒϓϔϕϖϗϘϙϚϛϜϝϞϟϠϡϰϱϲϳϴϵ϶ϷϸϹϺϻϼϽϾϿ","Halfwidth Fullwidth":"！＂＃＄％＆＇（）＊＋，－．／０１２３４５６７８９：；＜＝＞？＠ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ［＼］＾＿｀ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ｛｜｝～","Latin Extended":" ¡¢£¤¥¦§¨©ª«¬­®¯°±²³´µ¶·¸¹º»¼½¾¿ÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖ×ØÙÚÛÜÝÞßàáâãäåæçèéêëìíîïðñòóôõö÷øùúûüýþÿĀāĂăĄąĆćĈĉĊċČčĎďĐđĒēĔĕĖėĘęĚěĜĝĞğĠġĢģĤĥĦħĨĩĪīĬĭĮįİıĲĳĴĵĶķĸĹĺĻļĽľĿŀŁłŃńŅņŇňŉŊŋŌōŎŏŐőŒœŔŕŖŗŘřŚśŜŝŞşŠšŢţŤťŦŧŨũŪūŬŭŮůŰűŲųŴŵŶŷŸŹźŻżŽžſƀƁƂƃƄƅƆƇƈƉƊƋƌƍƎƏƐƑƒƓƔƕƖƗƘƙƚƛƜƝƞƟƠơƢƣƤƥƦƧƨƩƪƫƬƭƮƯưƱƲƳƴƵƶƷƸƹƺƻƼƽƾƿǀǁǂǃǄǅǆǇǈǉǊǋǌǍǎǏǐǑǒǓǔǕǖǗǘǙǚǛǜǝǞǟǠǡǢǣǤǥǦǧǨǩǪǫǬǭǮǯǰǱǲǳǴǵǶǷǸǹǺǻǼǽǾǿȀȁȂȃȄȅȆȇȈȉȊȋȌȍȎȏȐȑȒȓȔȕȖȗȘșȚțȜȝȞȟȠȡȢȣȤȥȦȧȨȩȪȫȬȭȮȯȰȱȲȳȴȵȶȷȸȹȺȻȼȽȾȿɀɁɂɃɄɅɆɇɈɉɊɋɌɍɎɏ","Letterlike Symbols":"℀℁ℂ℃℄℅℆ℇ℈℉ℊℋℌℍℎℏℐℑℒℓ℔ℕ№℗℘ℙℚℛℜℝ℞℟℠℡™℣ℤ℥Ω℧ℨ℩KÅℬℭ℮ℯℰℱℲℳℴℵℶℷℸℹ℺℻ℼℽℾℿ⅀⅁⅂⅃⅄ⅅⅆⅇⅈⅉ⅊⅋⅌⅍ⅎ⅏","Math Operators":"∀∁∂∃∄∅∆∇∈∉∊∋∌∍∎∏∐∑−∓∕∘∙√∞∠∣∤∥∧∨∩∪∫∴∵∶∷∸∹∼∽∾≁≃≅≇≈≉≊≋≌≍≔≕≗≟≠≡≢≣≤≥≪≫≬≭≮≯≰≱≲≳≴≵≺≻≼⊂⊃⊄⊅⊆⊇⊈⊉⊎⊏⊐⊑⊒⊓⊔⊕⊖⊗⊘⊙⊚⊛⊜⊝⊞⊟⊠⊡⊢⊣⊤⊥⊴⊵⊸⊻⊼⊽⋂⋃⋄⋆⋈⋉⋊⋍⋎⋐⋑⋢⋣⋮⋯⋰⋱","Misc Technical":"⌂⌃⌄⌅⌈⌉⌊⌋⌐⌘⌙⌜⌝⌞⌟⌠⌡⌤⌥⌦⌨⌫⌶⌷⌸⌹⌺⌻⌼⌽⌾⌿⍀⍁⍂⍃⍄⍅⍆⍇⍈⍉⍊⍋⍌⍍⍎⍏⍐⍑⍒⍓⍔⍕⍖⍗⍘⍙⍚⍛⍜⍝⍞⍟⍠⍡⍢⍣⍤⍥⍦⍧⍨⍩⍪⍫⍬⍭⍮⍯⍰⍱⍲⍳⍴⍵⍶⍷⍸⍹⍺⎉⎊⎋⎕⎛⎜⎝⎞⎟⎠⎡⎢⎣⎤⎥⎦⎧⎨⎩⎪⎫⎬⎭⎮⎰⎱⎲⎳⎴⎵⎶⎷⎸⎹⎺⎻⎼⎽⏎⏜⏝⏞⏟⏠⏡⏻⏼⏽⏾","Superscripts Subscripts":"⁰ⁱ⁴⁵⁶⁷⁸⁹⁺⁻⁼⁽⁾ⁿ₀₁₂₃₄₅₆₇₈₉₊₋₌₍₎ₐₑₒₓₔₕₖₗₘₙₚₛₜ","Supplemental Punctuation":"⸀⸁⸂⸃⸄⸅⸆⸇⸈⸉⸊⸋⸌⸍⸎⸏⸐⸑⸒⸓⸔⸕⸖⸗⸘⸙⸚⸛⸜⸝⸞⸟⸠⸡⸢⸣⸤⸥⸦⸧⸨⸩⸪⸫⸬⸭⸮ⸯ⸰⸱⸲⸳⸴⸵⸶⸷⸸⸹⸺⸻⸼⸽⸾⸿⹀⹁⹂⹃⹄⹅⹆⹇⹈⹉⹊⹋⹌⹍⹎⹏⹐⹑⹒⹓⹔⹕⹖⹗⹘⹙⹚⹛⹜⹝"};
+
+        // 카테고리 필터 옵션 추가
+        const categoryFilter = document.getElementById('categoryFilter');
+        Object.keys(charData).forEach(cat => {
+            const option = document.createElement('option');
+            option.value = cat;
+            option.textContent = `${cat} (${charData[cat].length})`;
+            categoryFilter.appendChild(option);
+        });
+
+        // 문자 그리드 렌더링
+        function renderChars() {
+            const container = document.getElementById('charContainer');
+            const filter = categoryFilter.value;
+            container.innerHTML = '';
+
+            Object.entries(charData).forEach(([category, chars]) => {
+                if (filter !== 'all' && filter !== category) return;
+
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category';
+
+                const header = document.createElement('div');
+                header.className = 'category-header';
+                header.innerHTML = `
+                    <div class="category-title">${category}</div>
+                    <div class="category-count">${chars.length} characters</div>
+                `;
+                categoryDiv.appendChild(header);
+
+                const grid = document.createElement('div');
+                grid.className = 'char-grid';
+
+                for (let char of chars) {
+                    const code = char.codePointAt(0);
+                    const item = document.createElement('div');
+                    item.className = 'char-item';
+                    item.textContent = char;
+                    item.setAttribute('data-code', `U+${code.toString(16).toUpperCase().padStart(4, '0')}`);
+                    item.title = `U+${code.toString(16).toUpperCase().padStart(4, '0')}`;
+
+                    // Click to copy
+                    item.addEventListener('click', () => {
+                        navigator.clipboard.writeText(char);
+                        item.style.background = '#667eea';
+                        setTimeout(() => {
+                            item.style.background = '#333';
+                        }, 300);
+                    });
+
+                    grid.appendChild(item);
+                }
+
+                categoryDiv.appendChild(grid);
+                container.appendChild(categoryDiv);
+            });
+        }
+
+        // 컨트롤 이벤트
+        const fontSize = document.getElementById('fontSize');
+        const fontWeight = document.getElementById('fontWeight');
+        const fontSizeValue = document.getElementById('fontSizeValue');
+        const fontWeightValue = document.getElementById('fontWeightValue');
+
+        fontSize.addEventListener('input', (e) => {
+            const value = e.target.value;
+            fontSizeValue.textContent = value + 'px';
+            document.querySelectorAll('.char-item').forEach(el => {
+                el.style.fontSize = value + 'px';
+            });
+        });
+
+        fontWeight.addEventListener('input', (e) => {
+            const value = e.target.value;
+            fontWeightValue.textContent = value;
+            document.querySelectorAll('.char-item').forEach(el => {
+                el.style.fontVariationSettings = `"wght" ${value}`;
+            });
+        });
+
+        categoryFilter.addEventListener('change', renderChars);
+
+        // 초기 렌더링
+        renderChars();
+    </script>
+</body>
+</html>

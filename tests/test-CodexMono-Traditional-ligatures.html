@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodexMono-Traditional.ttf - Ligature & OpenType Features Test</title>
+    <style>
+        @font-face {
+            font-family: 'CodexMono Traditional';
+            src: url('CodexMono-Traditional.ttf') format('truetype');
+            font-weight: 100 800;
+            font-style: normal;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'CodexMono Traditional', monospace;
+            background: #0f0f0f;
+            color: #e0e0e0;
+            padding: 40px;
+            line-height: 1.8;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 40px rgba(240, 147, 251, 0.3);
+        }
+
+        .header h1 {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: white;
+        }
+
+        .header p {
+            font-size: 16px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .controls {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid #2a2a2a;
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .control-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .control-group label {
+            font-weight: 500;
+            min-width: 120px;
+            color: #aaa;
+        }
+
+        input[type="range"] {
+            flex: 1;
+            min-width: 200px;
+            height: 6px;
+            background: #2a2a2a;
+            border-radius: 3px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: #f093fb;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 18px;
+            height: 18px;
+            background: #f093fb;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+        }
+
+        .value-display {
+            min-width: 80px;
+            text-align: right;
+            font-weight: 600;
+            color: #f093fb;
+        }
+
+        .toggle-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .toggle-btn {
+            background: #2a2a2a;
+            color: #aaa;
+            border: 1px solid #3a3a3a;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-family: inherit;
+            font-size: 13px;
+        }
+
+        .toggle-btn:hover {
+            border-color: #f093fb;
+            color: #f093fb;
+        }
+
+        .toggle-btn.active {
+            background: #f093fb;
+            color: white;
+            border-color: #f093fb;
+        }
+
+        .test-section {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 30px;
+        }
+
+        .test-section h2 {
+            color: #f093fb;
+            margin-bottom: 20px;
+            font-size: 24px;
+            border-bottom: 2px solid #2a2a2a;
+            padding-bottom: 10px;
+        }
+
+        .test-section h3 {
+            color: #f5576c;
+            margin: 20px 0 15px 0;
+            font-size: 18px;
+        }
+
+        .comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .comparison-box {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            padding: 20px;
+        }
+
+        .comparison-label {
+            color: #888;
+            font-size: 12px;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .comparison-text {
+            font-size: 24px;
+            line-height: 1.6;
+            word-break: break-all;
+        }
+
+        .no-ligatures {
+            font-variant-ligatures: none;
+        }
+
+        .with-ligatures {
+            font-variant-ligatures: common-ligatures discretionary-ligatures;
+        }
+
+        .sample-text {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 15px;
+            font-size: 18px;
+            line-height: 1.8;
+        }
+
+        .code-block {
+            background: #0a0a0a;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            padding: 20px;
+            margin: 15px 0;
+            overflow-x: auto;
+        }
+
+        .code-line {
+            margin-bottom: 5px;
+        }
+
+        .stats {
+            background: #1a1a1a;
+            border: 1px solid #2a2a2a;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stats h3 {
+            color: #f093fb;
+            margin-bottom: 15px;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-item {
+            background: #0f0f0f;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #2a2a2a;
+        }
+
+        .stat-label {
+            color: #888;
+            font-size: 11px;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #f093fb;
+        }
+
+        .feature-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .feature-tag {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            padding: 10px;
+            border-radius: 6px;
+            text-align: center;
+            font-family: monospace;
+            color: #f5576c;
+            font-weight: 600;
+        }
+
+        .cjk-samples {
+            background: #0f0f0f;
+            border: 1px solid #2a2a2a;
+            border-radius: 6px;
+            padding: 20px;
+            margin-bottom: 15px;
+        }
+
+        .cjk-text {
+            font-size: 32px;
+            line-height: 1.8;
+            margin-bottom: 15px;
+        }
+
+        .note {
+            background: rgba(245, 87, 108, 0.1);
+            border-left: 4px solid #f5576c;
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 4px;
+            font-size: 14px;
+            color: #ccc;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>CodexMono-Traditional.ttf - Ligature & OpenType Test</h1>
+        <p>Traditional Chinese (繁體字) | 33,726 Characters | Variable Font (100-800) | GSUB Features: 43</p>
+    </div>
+
+    <div class="stats">
+        <h3>Font Information</h3>
+        <div class="stats-grid">
+            <div class="stat-item">
+                <div class="stat-label">Characters</div>
+                <div class="stat-value">33,726</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">Glyphs</div>
+                <div class="stat-value">34,056</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">File Size</div>
+                <div class="stat-value">17.2 MB</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">GSUB Features</div>
+                <div class="stat-value">43</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-label">gvar Coverage</div>
+                <div class="stat-value">100%</div>
+            </div>
+        </div>
+
+        <h3 style="margin-top: 25px;">OpenType Features (GSUB)</h3>
+        <div class="feature-list">
+            <div class="feature-tag">aalt</div>
+            <div class="feature-tag">calt</div>
+            <div class="feature-tag">case</div>
+            <div class="feature-tag">ccmp</div>
+            <div class="feature-tag">cv01-20</div>
+            <div class="feature-tag">dlig</div>
+            <div class="feature-tag">liga</div>
+            <div class="feature-tag">locl</div>
+            <div class="feature-tag">salt</div>
+            <div class="feature-tag">zero</div>
+        </div>
+    </div>
+
+    <div class="controls">
+        <div class="control-group">
+            <label>Font Size:</label>
+            <input type="range" id="fontSize" min="12" max="96" value="24">
+            <span class="value-display" id="fontSizeValue">24px</span>
+        </div>
+        <div class="control-group">
+            <label>Font Weight:</label>
+            <input type="range" id="fontWeight" min="100" max="800" step="100" value="400">
+            <span class="value-display" id="fontWeightValue">400</span>
+        </div>
+        <div class="control-group">
+            <label>Ligatures:</label>
+            <div class="toggle-group">
+                <button class="toggle-btn active" data-liga="none">OFF</button>
+                <button class="toggle-btn" data-liga="common">Common</button>
+                <button class="toggle-btn" data-liga="discretionary">Discretionary</button>
+                <button class="toggle-btn" data-liga="all">All</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="note">
+        <strong>📝 Note:</strong> CodexMono is a monospace font. Traditional monospace fonts typically do NOT include programming ligatures (like ->, =>, !=) to maintain strict character alignment. This test shows OpenType features present in the font, which include contextual alternates and character variants, not traditional programming ligatures.
+    </div>
+
+    <div class="test-section">
+        <h2>1. Programming Symbols (Contextual Alternates)</h2>
+
+        <h3>Operators & Arrows</h3>
+        <div class="comparison">
+            <div class="comparison-box">
+                <div class="comparison-label">Ligatures OFF</div>
+                <div class="comparison-text no-ligatures" id="operators1">
+                    -> => != >= <= == === !== ++ -- && || ?? ??=
+                </div>
+            </div>
+            <div class="comparison-box">
+                <div class="comparison-label">Ligatures ON</div>
+                <div class="comparison-text with-ligatures" id="operators2">
+                    -> => != >= <= == === !== ++ -- && || ?? ??=
+                </div>
+            </div>
+        </div>
+
+        <h3>Math & Logic</h3>
+        <div class="comparison">
+            <div class="comparison-box">
+                <div class="comparison-label">Ligatures OFF</div>
+                <div class="comparison-text no-ligatures">
+                    <* *> /* */ /** <!-- --> =~ !~ <> <| |> </ />
+                </div>
+            </div>
+            <div class="comparison-box">
+                <div class="comparison-label">Ligatures ON</div>
+                <div class="comparison-text with-ligatures">
+                    <* *> /* */ /** <!-- --> =~ !~ <> <| |> </ />
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>2. Code Examples</h2>
+
+        <div class="code-block">
+            <div class="code-line">// JavaScript/TypeScript</div>
+            <div class="code-line">const sum = (a, b) => a + b;</div>
+            <div class="code-line">if (x !== null && y >= 10) {</div>
+            <div class="code-line">    return x?.value ?? defaultValue;</div>
+            <div class="code-line">}</div>
+        </div>
+
+        <div class="code-block">
+            <div class="code-line">// Python</div>
+            <div class="code-line">def process(data):</div>
+            <div class="code-line">    return [x for x in data if x != None]</div>
+            <div class="code-line">    # List comprehension with !=</div>
+        </div>
+
+        <div class="code-block">
+            <div class="code-line">// Rust</div>
+            <div class="code-line">fn main() -> Result<(), Error> {</div>
+            <div class="code-line">    let x: Option<i32> = Some(5);</div>
+            <div class="code-line">    x.map(|n| n * 2)</div>
+            <div class="code-line">}</div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>3. CJK Text Samples (Traditional Chinese)</h2>
+
+        <div class="cjk-samples">
+            <h3>繁體中文範例</h3>
+            <div class="cjk-text">
+                中華民國臺灣省臺北市信義區
+            </div>
+            <div class="cjk-text">
+                電腦科學與資訊工程學系
+            </div>
+            <div class="cjk-text">
+                軟體開發、人工智慧、機器學習
+            </div>
+        </div>
+
+        <div class="cjk-samples">
+            <h3>Korean Text (한글)</h3>
+            <div class="cjk-text">
+                안녕하세요. 코드엑스모노입니다.
+            </div>
+            <div class="cjk-text">
+                프로그래밍을 위한 완벽한 모노스페이스 폰트
+            </div>
+        </div>
+
+        <div class="cjk-samples">
+            <h3>Japanese Text (日本語)</h3>
+            <div class="cjk-text">
+                こんにちは。プログラミング用フォントです。
+            </div>
+            <div class="cjk-text">
+                カタカナ、ひらがな、漢字対応
+            </div>
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>4. Special Characters & Symbols</h2>
+
+        <div class="sample-text">
+            <h3>Circled Numbers</h3>
+            ①②③④⑤⑥⑦⑧⑨⑩⑪⑫⑬⑭⑮⑯⑰⑱⑲⑳
+        </div>
+
+        <div class="sample-text">
+            <h3>Fullwidth ASCII</h3>
+            ＡＢＣＤＥＦＧＨＩＪＫＬＭＮＯＰＱＲＳＴＵＶＷＸＹＺ
+            <br>
+            ａｂｃｄｅｆｇｈｉｊｋｌｍｎｏｐｑｒｓｔｕｖｗｘｙｚ
+            <br>
+            ０１２３４５６７８９
+        </div>
+
+        <div class="sample-text">
+            <h3>Parenthesized Hangul</h3>
+            ㈀㈁㈂㈃㈄㈅㈆㈇㈈㈉㈊㈋㈌㈍㈎㈏㈐㈑㈒㈓㈔㈕㈖㈗㈘㈙㈚㈛
+        </div>
+
+        <div class="sample-text">
+            <h3>Box Drawing (Terminal UI)</h3>
+            ┌─────────────────┐
+            <br>
+            │ Terminal Window │
+            <br>
+            ├─────────────────┤
+            <br>
+            │ Content Area    │
+            <br>
+            └─────────────────┘
+        </div>
+
+        <div class="sample-text">
+            <h3>Spanning Symbols (Width: 1800)</h3>
+            ⏜ ⏝ ⏞ ⏟ ⏠ ⏡ ⸻
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>5. Variable Font Weight Spectrum</h2>
+
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <div style="font-variation-settings: 'wght' 100;">Weight 100 (Thin): The quick brown fox jumps over 快速的棕色狐狸跳過</div>
+            <div style="font-variation-settings: 'wght' 200;">Weight 200 (ExtraLight): The quick brown fox jumps over 快速的棕色狐狸跳過</div>
+            <div style="font-variation-settings: 'wght' 300;">Weight 300 (Light): The quick brown fox jumps over 快速的棕色狐狸跳過</div>
+            <div style="font-variation-settings: 'wght' 400;">Weight 400 (Regular): The quick brown fox jumps over 快速的棕色狐狸跳過</div>
+            <div style="font-variation-settings: 'wght' 500;">Weight 500 (Medium): The quick brown fox jumps over 快速的棕色狐狸跳過</div>
+            <div style="font-variation-settings: 'wght' 600;">Weight 600 (SemiBold): The quick brown fox jumps over 快速的棕色狐狸跳過</div>
+            <div style="font-variation-settings: 'wght' 700;">Weight 700 (Bold): The quick brown fox jumps over 快速的棕色狐狸跳過</div>
+            <div style="font-variation-settings: 'wght' 800;">Weight 800 (ExtraBold): The quick brown fox jumps over 快速的棕色狐狸跳過</div>
+        </div>
+    </div>
+
+    <script>
+        // 폰트 로드 확인
+        document.fonts.ready.then(() => {
+            console.log('CodexMono Traditional font loaded successfully');
+        });
+
+        // Font size control
+        const fontSize = document.getElementById('fontSize');
+        const fontSizeValue = document.getElementById('fontSizeValue');
+        fontSize.addEventListener('input', (e) => {
+            const value = e.target.value;
+            fontSizeValue.textContent = value + 'px';
+            document.querySelectorAll('.comparison-text, .sample-text, .code-block, .cjk-text').forEach(el => {
+                el.style.fontSize = value + 'px';
+            });
+        });
+
+        // Font weight control
+        const fontWeight = document.getElementById('fontWeight');
+        const fontWeightValue = document.getElementById('fontWeightValue');
+        fontWeight.addEventListener('input', (e) => {
+            const value = e.target.value;
+            fontWeightValue.textContent = value;
+            document.querySelectorAll('.comparison-text, .sample-text, .code-block, .cjk-text').forEach(el => {
+                el.style.fontVariationSettings = `"wght" ${value}`;
+            });
+        });
+
+        // Ligature toggle
+        const ligatureBtns = document.querySelectorAll('[data-liga]');
+        ligatureBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                ligatureBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                const mode = btn.dataset.liga;
+                let ligaSetting;
+
+                switch(mode) {
+                    case 'none':
+                        ligaSetting = 'none';
+                        break;
+                    case 'common':
+                        ligaSetting = 'common-ligatures';
+                        break;
+                    case 'discretionary':
+                        ligaSetting = 'discretionary-ligatures';
+                        break;
+                    case 'all':
+                        ligaSetting = 'common-ligatures discretionary-ligatures';
+                        break;
+                }
+
+                document.querySelectorAll('.with-ligatures').forEach(el => {
+                    el.style.fontVariantLigatures = ligaSetting;
+                });
+            });
+        });
+    </script>
+</body>
+</html>

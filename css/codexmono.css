@@ -1,0 +1,73 @@
+/**
+ * CodexMono - Professional monospace Variable Font
+ * Version: 1.0.0
+ * License: OFL-1.1
+ * Author: NIIA of Monolex.ai
+ */
+
+/* CodexMono - Latin Core (648 KB) */
+@font-face {
+  font-family: 'CodexMono';
+  src: url('../CodexMono.woff2') format('woff2'),
+       url('../CodexMono.ttf') format('truetype');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* CodexMono KR - Korean + Japanese (5.8 MB) */
+@font-face {
+  font-family: 'CodexMono KR';
+  src: url('../CodexMono-KR.woff2') format('woff2'),
+       url('../CodexMono-KR.ttf') format('truetype');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* CodexMono Traditional - Traditional Chinese (17.2 MB) */
+@font-face {
+  font-family: 'CodexMono Traditional';
+  src: url('../CodexMono-Traditional.woff2') format('woff2'),
+       url('../CodexMono-Traditional.ttf') format('truetype');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* CodexMono EA - Simplified Chinese + Complete CJK (18.4 MB) */
+@font-face {
+  font-family: 'CodexMono EA';
+  src: url('../CodexMono-EA.woff2') format('woff2'),
+       url('../CodexMono-EA.ttf') format('truetype');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Utility Classes */
+.codexmono {
+  font-family: 'CodexMono', monospace;
+}
+
+.codexmono-kr {
+  font-family: 'CodexMono KR', monospace;
+}
+
+.codexmono-traditional {
+  font-family: 'CodexMono Traditional', monospace;
+}
+
+.codexmono-ea {
+  font-family: 'CodexMono EA', monospace;
+}
+
+/* Variable Font Weight Helpers */
+.codexmono-thin { font-variation-settings: 'wght' 100; }
+.codexmono-extralight { font-variation-settings: 'wght' 200; }
+.codexmono-light { font-variation-settings: 'wght' 300; }
+.codexmono-regular { font-variation-settings: 'wght' 400; }
+.codexmono-medium { font-variation-settings: 'wght' 500; }
+.codexmono-semibold { font-variation-settings: 'wght' 600; }
+.codexmono-bold { font-variation-settings: 'wght' 700; }
+.codexmono-extrabold { font-variation-settings: 'wght' 800; }
