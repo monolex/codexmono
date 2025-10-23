@@ -1,6 +1,6 @@
 {
   "name": "@monolex/codexmono",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Professional monospace Variable Font for multilingual development - Latin, Korean, Japanese, Chinese with perfect CJK support",
   "main": "index.js",
   "bin": {
