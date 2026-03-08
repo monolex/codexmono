@@ -1,124 +1,46 @@
 # CodexMono Font Files - SHA256 Checksums
 
-**Generated**: 2025-10-23
-**Version**: 1.0.0
+**Generated**: 2026-03-08 19:01 UTC
+**Version**: 1.0.1
 
-## Font Files
-
-### TTF (TrueType Font)
+## TTF
 
 ```
-4a417160559677ae1d82e0447056745392fbfed2c227a06101f75d62c454951d  CodexMono-EA.ttf
-535b07ae0b28fadd2bde2b865288c09c96c3cac55edd48825da2abb2490ee64d  CodexMono-Emoji-Color.ttf
+9b4aaeeef14babdca6a05fdf75bd74a4fa94a24b4ac97ffefc6415c912f7e357  CodexMono-EA.ttf
+f8b7f8df4f2ca5dcc83a4c28d2a6983cd1942cb4abacde62a1ee7b2c2fdea7da  CodexMono-KR.ttf
+6faca46a813c6eeac4aa1404dcd98e70dd952499647b945b1e45a19e89fe5dd3  CodexMono-Traditional.ttf
+5a8410b16d9811593be247cde652e0480b4f2bc6f035856bd892c21f9908716c  CodexMono.ttf
 bd57b792f6308c771e98eb8bcdeb2b2b87ff617b4025a4d8330699734ceab032  CodexMono-Emoji.ttf
-5e75716b589639ea7974348d34eb66321afac629d687d69c855704f423f6a3f2  CodexMono-KR.ttf
-d16c8fb6fe74a8217a770b5041f04f99c7082e1620130ab7966422e745f1b5b3  CodexMono-Traditional.ttf
-a839d26f8fd897ab2b3ad27a9d69dc4638e727856ff6d57f07535093b6b6abb0  CodexMono.ttf
+535b07ae0b28fadd2bde2b865288c09c96c3cac55edd48825da2abb2490ee64d  CodexMono-Emoji-Color.ttf
+5cb226148535668a5c47816cdde9118a999bb7af7c73a5357e57515838237e75  CodexMono-EA-Nerd.ttf
+b5a7bd9a972417cd261a1932a71af66d168c154bec9687a4e56f7a196e8d1ca5  CodexMono-KR-Nerd.ttf
+264d59fa46c4e8bc8d5c36e3d39884fababb0d2c79b8196efbe2c4c91b210067  CodexMono-Nerd.ttf
+9348462f87e4c9e2bf56177c0c27193e2284302bd4b80d626462936d4cc61959  CodexMono-Traditional-Nerd.ttf
 ```
 
-### WOFF2 (Web Font Format 2)
+## WOFF2
 
 ```
-8fe0c6274b33b590c6499650262133792c3d74d080ca4066e0d714632070b08b  CodexMono-EA.woff2
-cc5ddb9b5788f08b64b365eb656185aadc4a7a4d84a7d861df40c473b6186ad6  CodexMono-KR.woff2
-96b8997bd0c023f10ddaa05bc2ef5f869129555bd70b6fe3e12695bdd78a4759  CodexMono-Traditional.woff2
-9340151baa9fe451c58558971d2e81a50f74074a9230913879b9c653ff192d91  CodexMono.woff2
+9c88f3f1d6738dc984951e05886e55a432f1eee290d34896cc66ff6ddb058c63  CodexMono-EA.woff2
+0e68084859b6b9b1a6d439c6cc9f1b45db53d3a707edb6a43563968903ee1933  CodexMono-KR.woff2
+a8445a61f1fa3cd49ffad971a76a947524f5670ae59e80523abbbefb19315081  CodexMono-Traditional.woff2
+00777573c9085229c7d70249bb5524c46f927d19d9bd170d51397ab6b4ef1494  CodexMono.woff2
+6771e3f44df9383b16280c9c361b815e78b9eec06d3d4709935004b25602849f  CodexMono-EA-Nerd.woff2
+7e9713da2b25d4ab0986517929b72aaedf64e3bc38088640adb075093b39c918  CodexMono-KR-Nerd.woff2
+ae0933d9d30352b28c753dd1d257a9791827c6263e0fd5372717267769eea0fc  CodexMono-Nerd.woff2
+1fc21e260ffb08787d5fc50f8097c0ccba43eb3d3e3011b4e9fae199d6407b71  CodexMono-Traditional-Nerd.woff2
 ```
 
-## File Sizes
+## Packages
 
-| File | Format | Size | Glyphs | Unicode | Variable |
-|------|--------|------|--------|---------|----------|
-| CodexMono-EA.ttf | TTF | 18.4 MB | 36,764 | 36,434 | ✅ |
-| CodexMono-EA.woff2 | WOFF2 | 7.4 MB | 36,764 | 36,434 | ✅ |
-| CodexMono-Traditional.ttf | TTF | 17.2 MB | 34,050 | 33,720 | ✅ |
-| CodexMono-Traditional.woff2 | WOFF2 | 7.0 MB | 34,050 | 33,720 | ✅ |
-| CodexMono-KR.ttf | TTF | 5.8 MB | 15,461 | 15,132 | ✅ |
-| CodexMono-KR.woff2 | WOFF2 | 1.8 MB | 15,461 | 15,132 | ✅ |
-| CodexMono.ttf | TTF | 648 KB | 4,813 | 4,007 | ✅ |
-| CodexMono.woff2 | WOFF2 | 227 KB | 4,813 | 4,007 | ✅ |
-| CodexMono-Emoji.ttf | TTF | 858 KB | 1,905 | 1,503 | ❌ |
-| CodexMono-Emoji-Color.ttf | TTF | 24 MB | 41,863 | 1,499 | ❌ |
-
-## Compression Ratios (TTF → WOFF2)
-
-| Font | TTF Size | WOFF2 Size | Compression |
-|------|----------|------------|-------------|
-| CodexMono-EA | 18.4 MB | 7.4 MB | **59.8%** |
-| CodexMono-Traditional | 17.2 MB | 7.0 MB | **59.3%** |
-| CodexMono-KR | 5.8 MB | 1.8 MB | **69.0%** |
-| CodexMono | 648 KB | 227 KB | **65.0%** |
-
-## Font Details
-
-### CodexMono-EA.ttf (Simplified Chinese + Special)
-- **Size**: 18.4 MB
-- **Characters**: 36,434
-- **Glyphs**: 36,764
-- **Includes**: Latin, Korean, Japanese, Simplified Chinese, Special chars (①②③, ㈜, Ａａ)
-- **gvar coverage**: 100%
-
-### CodexMono-Traditional.ttf (Traditional Chinese + Special)
-- **Size**: 17.2 MB
-- **Characters**: 33,720
-- **Glyphs**: 34,050
-- **Includes**: Latin, Korean, Japanese, Traditional Chinese, Special chars
-- **gvar coverage**: 100%
-
-### CodexMono-KR.ttf (Korean/Japanese)
-- **Size**: 5.8 MB
-- **Characters**: 15,132
-- **Glyphs**: 15,461
-- **Includes**: Latin, Korean, Japanese (Hiragana, Katakana)
-- **gvar coverage**: 100%
-
-## Verification
-
-### macOS/Linux
-```bash
-shasum -a 256 -c CHECKSUMS.md
 ```
-
-### Individual File Check
-```bash
-# Check CodexMono-EA.ttf
-shasum -a 256 CodexMono-EA.ttf
-
-# Should match:
-# 976e66683ab15b633f3a63510157b8e96c66fdcc5f1c28a08e103caeac9fb6c5
-```
-
-### Windows (PowerShell)
-```powershell
-Get-FileHash CodexMono-EA.ttf -Algorithm SHA256
+72a2dffc622892908a080db499b6a03ad96ea35d53658affe1cb5861ab049932  monolex-codexmono-1.0.0.tgz
+bcb8ab0377abb495407bd0789870356f4c7d8c0dd1462ff7185374278d34ae8e  monolex-codexmono-1.0.1.tgz
 ```
 
 ## Notes
 
-- **Release Date**: 2025-10-23
-- **All fonts**: Variable Fonts (weight 100-800)
-- **Monospace**: 600 units (Latin), 1200 units (CJK)
-- **Source TTF dates**:
-  - CodexMono-EA.ttf: 2025-10-23 (updated with special chars)
-  - CodexMono-Traditional.ttf: 2025-10-23 (renamed from CodexMono-KR)
-  - CodexMono-KR.ttf: 2025-10-23 (renamed from CodexMono-KoJa)
-  - CodexMono.ttf: 2025-09-24
-
-## What These Checksums Guarantee
-
-✅ **File Integrity**: Files haven't been corrupted during download
-✅ **Authenticity**: Files are original from CodexMono project
-✅ **Version Match**: You have the correct version of each file
-
-## If Checksums Don't Match
-
-1. **Download again**: File may have been corrupted
-2. **Check file name**: Ensure exact filename match (case-sensitive)
-3. **Verify source**: Download only from official sources
-4. **Report**: If persistent, report to legal@monolex.ai
-
----
-
-*Generated: 2025-10-23*
-*CodexMono Version: 1.0.0*
-*Project: https://monolex.ai/with/codexmono*
+- `CodexMono-EA.ttf` and `CodexMono-Traditional.ttf` now use the `U+273D 623-in-600 live` promotion.
+- Nerd support fonts are published under `fonts/nerd/{ttf,woff2}`.
+- The official nerd-support filenames use the `CodexMono-<Variant>-Nerd` suffix style.
+- `CodexMono-Emoji*.ttf` remain in `.legacy/` and are listed here for integrity tracking.

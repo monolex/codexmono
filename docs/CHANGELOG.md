@@ -6,6 +6,15 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ---
 
+## [Unreleased]
+
+## [1.0.1] - 2026-03-09
+
+### Changed
+- Promoted the `U+273D 623-in-600 live` treatment into `CodexMono-EA.ttf` and `CodexMono-Traditional.ttf`.
+- Added official `CodexMono Nerd` distribution artifacts under `fonts/nerd/{ttf,woff2}`.
+- Published `monolex-codexmono-1.0.1.tgz` with both base and nerd families bundled.
+
 ## [1.0.0] - 2025-10-23
 
 ### 🎉 Initial Public Release: Philosophy-Driven AI LLM Protocol Font
