@@ -248,6 +248,42 @@ For the ultimate experience, we recommend using **Monolex AI Terminal**:
 
 ---
 
+## Supplemental Distribution Families
+
+### CodexMono Nerd
+**2.66 MB** | **14,400 characters** | **Variable Font 100-800**
+
+`Nerd` is the compatibility-layer build.
+It exists for environments that want CodexMono plus terminal-symbol coverage, without stepping into the larger Hermes messenger family yet.
+It preserves CodexMono's 600-unit single-cell rules for imported Nerd-compatible symbols.
+
+Files:
+- `fonts/nerd/ttf/CodexMono-Nerd.ttf`
+- `fonts/nerd/ttf/CodexMono-KR-Nerd.ttf`
+- `fonts/nerd/ttf/CodexMono-EA-Nerd.ttf`
+- `fonts/nerd/ttf/CodexMono-Traditional-Nerd.ttf`
+
+### CodexMono Hermes
+**3.46 MB** | **15,860 characters** | **Variable Font 100-800**
+
+`Hermes` is the messenger family: `Nerd + Emoji + more Unicode`.
+The name is meant as the bridge between AI and Human, not as the label of one fixed emoji source.
+The current `1.0.2` release builds Hermes on top of the Nerd compatibility layer and adds the first integrated emoji source layer, normalized to CodexMono's 1200-unit wide-cell rule for added emoji.
+
+Files:
+- `fonts/hermes/ttf/CodexMono-Hermes.ttf`
+- `fonts/hermes/ttf/CodexMono-KR-Hermes.ttf`
+- `fonts/hermes/ttf/CodexMono-EA-Hermes.ttf`
+- `fonts/hermes/ttf/CodexMono-Traditional-Hermes.ttf`
+
+WOFF2 artifacts for both `Nerd` and `Hermes` are bundled under `fonts/nerd/woff2` and `fonts/hermes/woff2`.
+
+Current build note:
+- `1.0.2` uses `Noto Emoji` static weight `300` as the current upstream source for Hermes' integrated emoji layer.
+- Future Hermes builds may experiment with alternate emoji sources while keeping the public Hermes family identity.
+
+---
+
 ## Installation & Usage
 
 ### Quick Install via npm (Recommended)

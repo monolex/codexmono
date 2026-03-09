@@ -17,8 +17,20 @@ Generated: 2026-03-08 19:01 UTC
 |---|---:|---:|
 | `monolex-codexmono-1.0.0.tgz` | 39.91 MB | baseline |
 | `monolex-codexmono-1.0.1.tgz` | 87.56 MB | +47.65 MB |
+| `monolex-codexmono-1.0.2.tgz` | 139.18 MB | +99.27 MB |
 
-The `1.0.1` tarball includes both the base family and the new `fonts/nerd/{ttf,woff2}` distribution artifacts.
+The `1.0.1` tarball includes both the base family and the new `fonts/nerd/{ttf,woff2}` distribution artifacts. The `1.0.2` tarball adds `fonts/hermes/{ttf,woff2}` on top of that bundle.
+
+## Hermes TTF
+
+| Family | Nerd TTF | Hermes TTF | Delta |
+|---|---:|---:|---:|
+| CodexMono | 2.66 MB | 3.46 MB | +0.80 MB |
+| CodexMono-KR | 7.83 MB | 8.64 MB | +0.81 MB |
+| CodexMono-EA | 20.37 MB | 21.17 MB | +0.80 MB |
+| CodexMono-Traditional | 19.18 MB | 19.99 MB | +0.81 MB |
+
+`Nerd` remains the separately shipped compatibility layer. `Hermes` is the larger public messenger-family name built above that layer. The current release uses `Noto Emoji` static weight `300` as its first upstream emoji source, but the shipped filenames intentionally omit source-specific suffixes.
 
 ## U+273D Promotion Deltas
 
@@ -44,3 +56,4 @@ The `1.0.1` tarball includes both the base family and the new `fonts/nerd/{ttf,w
 - `Base` and `KR` have no `U+273D` glyph and are unchanged by this promotion.
 - The package delta is larger than the per-font delta because `1.0.1` publishes both base and nerd families together.
 - The reference TTF comparison is not like-for-like: `CodexMono-Nerd.ttf` is variable, while the JetBrains and Symbols references are static inputs.
+- `Hermes` builds use the corresponding `Nerd` layer as their compatibility-oriented base and add only missing emoji codepoints at `1200` width.

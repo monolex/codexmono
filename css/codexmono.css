@@ -1,68 +1,131 @@
 /**
  * CodexMono - Professional monospace Variable Font
- * Version: 1.0.0
+ * Version: 1.0.2
  * License: OFL-1.1
  * Author: NIIA of Monolex.ai
  */
 
-/* CodexMono - Latin Core (648 KB) */
 @font-face {
   font-family: 'CodexMono';
-  src: url('../CodexMono.woff2') format('woff2'),
-       url('../CodexMono.ttf') format('truetype');
+  src: url('../fonts/woff2/CodexMono.woff2') format('woff2'),
+       url('../fonts/ttf/CodexMono.ttf') format('truetype');
   font-weight: 100 800;
   font-style: normal;
   font-display: swap;
 }
 
-/* CodexMono KR - Korean + Japanese (5.8 MB) */
 @font-face {
   font-family: 'CodexMono KR';
-  src: url('../CodexMono-KR.woff2') format('woff2'),
-       url('../CodexMono-KR.ttf') format('truetype');
+  src: url('../fonts/woff2/CodexMono-KR.woff2') format('woff2'),
+       url('../fonts/ttf/CodexMono-KR.ttf') format('truetype');
   font-weight: 100 800;
   font-style: normal;
   font-display: swap;
 }
 
-/* CodexMono Traditional - Traditional Chinese (17.2 MB) */
 @font-face {
   font-family: 'CodexMono Traditional';
-  src: url('../CodexMono-Traditional.woff2') format('woff2'),
-       url('../CodexMono-Traditional.ttf') format('truetype');
+  src: url('../fonts/woff2/CodexMono-Traditional.woff2') format('woff2'),
+       url('../fonts/ttf/CodexMono-Traditional.ttf') format('truetype');
   font-weight: 100 800;
   font-style: normal;
   font-display: swap;
 }
 
-/* CodexMono EA - Simplified Chinese + Complete CJK (18.4 MB) */
 @font-face {
   font-family: 'CodexMono EA';
-  src: url('../CodexMono-EA.woff2') format('woff2'),
-       url('../CodexMono-EA.ttf') format('truetype');
+  src: url('../fonts/woff2/CodexMono-EA.woff2') format('woff2'),
+       url('../fonts/ttf/CodexMono-EA.ttf') format('truetype');
   font-weight: 100 800;
   font-style: normal;
   font-display: swap;
 }
 
-/* Utility Classes */
-.codexmono {
-  font-family: 'CodexMono', monospace;
+@font-face {
+  font-family: 'CodexMono Nerd';
+  src: url('../fonts/nerd/woff2/CodexMono-Nerd.woff2') format('woff2'),
+       url('../fonts/nerd/ttf/CodexMono-Nerd.ttf') format('truetype');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
 }
 
-.codexmono-kr {
-  font-family: 'CodexMono KR', monospace;
+@font-face {
+  font-family: 'CodexMono KR Nerd';
+  src: url('../fonts/nerd/woff2/CodexMono-KR-Nerd.woff2') format('woff2'),
+       url('../fonts/nerd/ttf/CodexMono-KR-Nerd.ttf') format('truetype');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
 }
 
-.codexmono-traditional {
-  font-family: 'CodexMono Traditional', monospace;
+@font-face {
+  font-family: 'CodexMono EA Nerd';
+  src: url('../fonts/nerd/woff2/CodexMono-EA-Nerd.woff2') format('woff2'),
+       url('../fonts/nerd/ttf/CodexMono-EA-Nerd.ttf') format('truetype');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
 }
 
-.codexmono-ea {
-  font-family: 'CodexMono EA', monospace;
+@font-face {
+  font-family: 'CodexMono Traditional Nerd';
+  src: url('../fonts/nerd/woff2/CodexMono-Traditional-Nerd.woff2') format('woff2'),
+       url('../fonts/nerd/ttf/CodexMono-Traditional-Nerd.ttf') format('truetype');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
 }
 
-/* Variable Font Weight Helpers */
+@font-face {
+  font-family: 'CodexMono Hermes';
+  src: url('../fonts/hermes/woff2/CodexMono-Hermes.woff2') format('woff2'),
+       url('../fonts/hermes/ttf/CodexMono-Hermes.ttf') format('truetype');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CodexMono KR Hermes';
+  src: url('../fonts/hermes/woff2/CodexMono-KR-Hermes.woff2') format('woff2'),
+       url('../fonts/hermes/ttf/CodexMono-KR-Hermes.ttf') format('truetype');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CodexMono EA Hermes';
+  src: url('../fonts/hermes/woff2/CodexMono-EA-Hermes.woff2') format('woff2'),
+       url('../fonts/hermes/ttf/CodexMono-EA-Hermes.ttf') format('truetype');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'CodexMono Traditional Hermes';
+  src: url('../fonts/hermes/woff2/CodexMono-Traditional-Hermes.woff2') format('woff2'),
+       url('../fonts/hermes/ttf/CodexMono-Traditional-Hermes.ttf') format('truetype');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+.codexmono { font-family: 'CodexMono', monospace; }
+.codexmono-kr { font-family: 'CodexMono KR', monospace; }
+.codexmono-traditional { font-family: 'CodexMono Traditional', monospace; }
+.codexmono-ea { font-family: 'CodexMono EA', monospace; }
+.codexmono-nerd { font-family: 'CodexMono Nerd', monospace; }
+.codexmono-kr-nerd { font-family: 'CodexMono KR Nerd', monospace; }
+.codexmono-ea-nerd { font-family: 'CodexMono EA Nerd', monospace; }
+.codexmono-traditional-nerd { font-family: 'CodexMono Traditional Nerd', monospace; }
+.codexmono-hermes { font-family: 'CodexMono Hermes', monospace; }
+.codexmono-kr-hermes { font-family: 'CodexMono KR Hermes', monospace; }
+.codexmono-ea-hermes { font-family: 'CodexMono EA Hermes', monospace; }
+.codexmono-traditional-hermes { font-family: 'CodexMono Traditional Hermes', monospace; }
+
 .codexmono-thin { font-variation-settings: 'wght' 100; }
 .codexmono-extralight { font-variation-settings: 'wght' 200; }
 .codexmono-light { font-variation-settings: 'wght' 300; }

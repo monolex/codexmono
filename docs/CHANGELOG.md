@@ -8,6 +8,19 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-03-09
+
+### Added
+- Added official `CodexMono Hermes` distribution artifacts under `fonts/hermes/{ttf,woff2}`.
+- Published four Hermes family variants: base, `KR`, `EA`, and `Traditional`.
+- Bundled upstream notice files for `Noto Emoji` and `Nerd Fonts`.
+
+### Changed
+- Promoted the first Hermes emoji build baseline using `Noto Emoji` 300 static masters while keeping `Hermes` as the broader public family identity.
+- Fixed the package entrypoint and CSS asset paths to match the actual `fonts/` directory layout.
+- Expanded package metadata to expose `Nerd` and `Hermes` families as first-class bundled artifacts.
+- Clarified docs so `Nerd` reads as a compatibility layer and `Hermes` reads as the larger integrated messenger family built above it.
+
 ## [1.0.1] - 2026-03-09
 
 ### Changed

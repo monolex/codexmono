@@ -22,7 +22,7 @@ const logo = [
 ];
 
 const tagline = '                    A Philosophy of True Monospace Excellence';
-const version = '                                      v1.0.0';
+const version = '                                      v1.0.2';
 const separator = '─'.repeat(84);
 const footer = '                   CodexMono by Monolex.AI    https://monolex.ai';
 
@@ -112,6 +112,8 @@ console.log(gray + '    • CodexMono.ttf' + reset + '             - Latin only 
 console.log(gray + '    • CodexMono-KR.ttf' + reset + '          - Korean/Japanese (5.8 MB)');
 console.log(gray + '    • CodexMono-EA.ttf' + reset + '          - Complete East Asia (18 MB)');
 console.log(gray + '    • CodexMono-Traditional.ttf' + reset + ' - East Asia with Traditional Chinese (17 MB)');
+console.log(gray + '    • fonts/nerd/*' + reset + '                - Nerd compatibility-layer variants');
+console.log(gray + '    • fonts/hermes/*' + reset + '              - Hermes integrated messenger-family variants');
 console.log('');
 console.log(gray + '    WOFF2 files also included for web use.' + reset);
 console.log('');

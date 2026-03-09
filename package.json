@@ -1,7 +1,7 @@
 {
   "name": "@monolex/codexmono",
-  "version": "1.0.1",
-  "description": "Professional monospace Variable Font for multilingual development - Latin, Korean, Japanese, Chinese with perfect CJK support",
+  "version": "1.0.2",
+  "description": "Professional monospace variable font family for multilingual development with CJK, Nerd, and Hermes emoji support",
   "main": "index.js",
   "bin": {
     "codexmono": "./bin/cli.js"
@@ -28,6 +28,9 @@
     "programming-font",
     "code-font",
     "terminal-font",
+    "emoji",
+    "nerd-font",
+    "hermes",
     "jetbrains-mono",
     "pretendard",
     "noto-sans"

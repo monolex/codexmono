@@ -1,6 +1,6 @@
 # CodexMono™ Complete Attribution
 
-**Version 1.0.0** | Released 2025-10-23
+**Version 1.0.2** | Released 2026-03-09
 
 **"This is not a font. This is a brick."**
 
@@ -21,6 +21,10 @@ All CodexMono fonts are licensed under the **SIL Open Font License 1.1**.
 - ❌ Modified versions cannot use "CodexMono" name
 
 Full license text: `licenses/LICENSE_CodexMono.txt`
+
+Supplemental bundled sources used by the `Nerd` and `Hermes` families also include their original notice files:
+- `licenses/NerdFonts-LICENSE.txt`
+- `licenses/NotoEmoji-LICENSE.txt`
 
 ---
 
@@ -106,6 +110,26 @@ CodexMono is the bridge between machine precision and human readability.
 **Source Fonts:**
 1. JetBrains Mono (Latin base, 600 units)
 2. Noto Sans Mono (Extended Latin, Math, Greek, Box drawing)
+
+### CodexMono Hermes — Integrated Messenger Family
+**Base: 15,860 characters** | **3.46 MB (TTF)** | **Variable base with static emoji masters**
+
+**Public variants:**
+- `CodexMono-Hermes.ttf`
+- `CodexMono-KR-Hermes.ttf`
+- `CodexMono-EA-Hermes.ttf`
+- `CodexMono-Traditional-Hermes.ttf`
+
+**Build composition:**
+1. The CodexMono Nerd compatibility layer as the symbol-bearing variable base
+2. The current integrated emoji source layer normalized to the 1200-unit wide-cell rule
+3. Existing overlap codepoints preserved from CodexMono to keep terminal-width behavior stable
+
+**Notes:**
+- `Hermes` is the messenger family name: Nerd + Emoji + more Unicode, intended as a bridge between AI and Human.
+- Public family name is `Hermes`; source-specific labels such as `300` are build provenance, not shipping suffixes.
+- The current `1.0.2` Hermes build uses `Noto Emoji` static weight `300` as its current upstream emoji source.
+- Added emoji remain 1200-wide, while existing CodexMono overlap symbols such as `U+26A0` remain at their base widths.
 
 ---
 
@@ -333,6 +357,57 @@ All Chinese characters were carefully:
 
 #### License File
 `licenses/NotoSansMono-LICENSE.txt` (same as Noto Sans Mono)
+
+---
+
+### 5. Noto Emoji (Current Hermes 1.0.2 Source)
+
+**Copyright**: © 2022 The Noto Project Authors (Google)
+**License**: SIL Open Font License 1.1
+**Source**: https://fonts.google.com/noto/specimen/Noto+Emoji
+
+#### Used In
+- CodexMono Hermes
+- CodexMono KR Hermes
+- CodexMono EA Hermes
+- CodexMono Traditional Hermes
+
+#### Modifications
+**Normalized for the current Hermes integrated emoji source**
+
+The current `1.0.2` Hermes build uses the Google Fonts `Noto Emoji` static weight `300` masters as the emoji source layer:
+1. Source outlines are uniformly scaled from the delivery width to `1200` units.
+2. Only emoji codepoints missing from the CodexMono Nerd base are imported.
+3. Existing overlap symbols remain mapped to the CodexMono base glyphs to preserve terminal width behavior.
+4. Imported emoji outlines are static; the CodexMono variable base remains intact.
+
+Future Hermes builds may swap this emoji source while preserving the public Hermes family identity.
+
+#### License File
+`licenses/NotoEmoji-LICENSE.txt`
+
+---
+
+### 6. Nerd Fonts (Compatibility Layer Source)
+
+**Copyright**: © Nerd Fonts project and original icon set authors
+**License**: Mixed upstream notices collected by the Nerd Fonts project
+**Source**: https://github.com/ryanoasis/nerd-fonts
+
+#### Used In
+- CodexMono Nerd
+- CodexMono KR Nerd
+- CodexMono EA Nerd
+- CodexMono Traditional Nerd
+- All Hermes variants
+
+#### Modifications
+**Subset merge into CodexMono variable bases**
+
+CodexMono Nerd imports symbol coverage from the Nerd Fonts symbol set and normalizes added glyphs to CodexMono's single-cell `600` unit rule. Hermes treats that merged Nerd layer as a compatibility-oriented base and then adds its integrated emoji source above it.
+
+#### License File
+`licenses/NerdFonts-LICENSE.txt`
 
 ---
 
@@ -574,8 +649,10 @@ All original license files included in `licenses/` directory:
 licenses/
 ├── LICENSE_CodexMono.txt       # CodexMono license (SIL OFL 1.1)
 ├── JetBrainsMono-LICENSE.txt   # JetBrains Mono original license
-├── Pretendard-LICENSE.txt      # Pretendard original license
-└── NotoSansMono-LICENSE.txt    # Noto fonts original license
+├── NerdFonts-LICENSE.txt       # Nerd Fonts bundled notices
+├── NotoEmoji-LICENSE.txt       # Noto Emoji bundled notices
+├── NotoSansMono-LICENSE.txt    # Noto fonts original license
+└── Pretendard-LICENSE.txt      # Pretendard original license
 ```
 
 **Main License**: `licenses/LICENSE_CodexMono.txt`
@@ -603,5 +680,5 @@ CodexMono = SMPC × Brick × Protocol
 
 ---
 
-Released: 2025-10-23
-Version: 1.0.0
+Released: 2026-03-09
+Version: 1.0.2
