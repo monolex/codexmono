@@ -1,6 +1,6 @@
 {
   "name": "@monolex/codexmono",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Professional monospace variable font family for multilingual development with CJK, Nerd, and Hermes emoji support",
   "main": "index.js",
   "bin": {

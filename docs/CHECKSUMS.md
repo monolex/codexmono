@@ -1,7 +1,7 @@
 # CodexMono Font Files - SHA256 Checksums
 
 **Generated**: 2026-03-10 01:19 UTC
-**Version**: 1.0.4
+**Version**: 1.0.5
 
 ## TTF
 

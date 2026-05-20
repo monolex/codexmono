@@ -1,6 +1,6 @@
 /**
  * CodexMono - Professional monospace Variable Font for multilingual development
- * @version 1.0.4
+ * @version 1.0.5
  * @license OFL-1.1
  * @author NIIA of Monolex.ai
  */
@@ -105,7 +105,7 @@ module.exports = {
     }
   },
   css: './css/codexmono.css',
-  version: '1.0.4',
+  version: '1.0.5',
   license: 'OFL-1.1',
   repository: 'https://github.com/monolex/codexmono',
   homepage: 'https://monolex.ai/with/codexmono'

@@ -8,6 +8,8 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+## [1.0.5] - 2026-05-20
+
 ### Added
 - New CLI commands that surface data already bundled in the package:
   - `info [target]` — family metadata (characters, size, description, paths) from index.js, with `--json`.
