@@ -1,13 +1,29 @@
 #!/usr/bin/env node
 /**
  * CodexMono CLI - Font Installation Tool
- * Simple commands: codexmono, codexmono install, codexmono uninstall, codexmono list
+ *
+ * Commands:
+ *   codexmono                       Install core (Latin/CJK base)
+ *   codexmono install [variant]     Install fonts (default: core)
+ *   codexmono uninstall [variant]   Remove fonts (default: all)
+ *   codexmono list                  Show install status
+ *   codexmono --help / --version
+ *
+ * Variants: core | nerd | hermes | all
+ *   core    = CodexMono, -KR, -Traditional, -EA       (4 fonts)
+ *   nerd    = + terminal-symbol layer                 (4 fonts)
+ *   hermes  = + emoji + extended Unicode              (4 fonts)
+ *   all     = core + nerd + hermes                    (12 fonts)
+ *
+ * Single source of truth: ../index.js (fonts metadata)
  */
 
-const { execSync } = require('child_process');
+const { execFileSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 const os = require('os');
+
+const fontMeta = require('../index.js').fonts;
 
 // ANSI colors
 const cyan = '\x1b[96m';
@@ -18,285 +34,268 @@ const gray = '\x1b[90m';
 const reset = '\x1b[0m';
 const bold = '\x1b[1m';
 
-// Get font directory (this script is in bin/, fonts are in ../fonts/ttf/)
-const fontDir = path.join(__dirname, '..', 'fonts', 'ttf');
 const platform = os.platform();
+const pkgRoot = path.join(__dirname, '..');
 
-// Parse command
-const command = process.argv[2] || 'install'; // Default to install if no command
+// Variant → list of keys in index.js fonts object
+const VARIANT_KEYS = {
+    core:   ['core', 'kr', 'traditional', 'ea'],
+    nerd:   ['nerd', 'krNerd', 'traditionalNerd', 'eaNerd'],
+    hermes: ['hermes', 'krHermes', 'traditionalHermes', 'eaHermes'],
+};
+VARIANT_KEYS.all = [...VARIANT_KEYS.core, ...VARIANT_KEYS.nerd, ...VARIANT_KEYS.hermes];
 
-// Show welcome message on first run (install command only)
-if (command === 'install') {
-    const postinstallPath = path.join(__dirname, '..', 'postinstall.js');
-    if (fs.existsSync(postinstallPath)) {
-        require(postinstallPath);
-    }
+/** Resolve variant name → array of {file, srcPath} */
+function getFonts(variantName) {
+    const keys = VARIANT_KEYS[variantName];
+    if (!keys) return null;
+    return keys.map(k => {
+        const meta = fontMeta[k];
+        if (!meta) throw new Error(`fonts.${k} missing in index.js`);
+        // meta.ttf looks like './fonts/ttf/CodexMono.ttf'
+        const rel = meta.ttf.replace(/^\.\//, '');
+        return {
+            key: k,
+            displayName: meta.name,
+            file: path.basename(meta.ttf),
+            srcPath: path.join(pkgRoot, rel),
+        };
+    });
 }
 
-// Font files
-const fontFiles = [
-    'CodexMono.ttf',
-    'CodexMono-KR.ttf',
-    'CodexMono-Traditional.ttf',
-    'CodexMono-EA.ttf'
-];
+function getSystemFontDir() {
+    if (platform === 'darwin') return path.join(os.homedir(), 'Library', 'Fonts');
+    if (platform === 'linux')  return path.join(os.homedir(), '.local', 'share', 'fonts');
+    if (platform === 'win32')  return 'C:\\Windows\\Fonts';
+    return null;
+}
 
-/**
- * Install fonts to system
- */
-function installFonts() {
-    console.log(cyan + bold + '\n  🎨 CodexMono Font Installer\n' + reset);
+function refreshLinuxFontCache() {
+    // execFileSync (no shell) — fixed argv, zero injection vector
+    try { execFileSync('fc-cache', ['-f', '-v'], { stdio: 'ignore' }); } catch (_) {}
+}
 
-    try {
-        if (platform === 'darwin') {
-            // macOS
-            const targetDir = path.join(os.homedir(), 'Library', 'Fonts');
-            console.log(gray + `  Installing to: ${targetDir}` + reset);
-
-            let installedCount = 0;
-            fontFiles.forEach(file => {
-                const source = path.join(fontDir, file);
-                const target = path.join(targetDir, file);
-
-                if (fs.existsSync(source)) {
-                    fs.copyFileSync(source, target);
-                    console.log(green + `  ✓ ${file}` + reset);
-                    installedCount++;
-                }
-            });
-
-            console.log(green + bold + `\n  ✅ ${installedCount} fonts installed successfully!\n` + reset);
-            console.log(gray + '  You can now use CodexMono in:' + reset);
-            console.log(gray + '    • VS Code (set "editor.fontFamily": "CodexMono")' + reset);
-            console.log(gray + '    • Terminal' + reset);
-            console.log(gray + '    • Any application\n' + reset);
-
-        } else if (platform === 'linux') {
-            // Linux
-            const targetDir = path.join(os.homedir(), '.local', 'share', 'fonts');
-
-            // Create directory if it doesn't exist
-            if (!fs.existsSync(targetDir)) {
-                fs.mkdirSync(targetDir, { recursive: true });
-            }
-
-            console.log(gray + `  Installing to: ${targetDir}` + reset);
-
-            let installedCount = 0;
-            fontFiles.forEach(file => {
-                const source = path.join(fontDir, file);
-                const target = path.join(targetDir, file);
-
-                if (fs.existsSync(source)) {
-                    fs.copyFileSync(source, target);
-                    console.log(green + `  ✓ ${file}` + reset);
-                    installedCount++;
-                }
-            });
-
-            // Refresh font cache
-            console.log(gray + '\n  Refreshing font cache...' + reset);
-            execSync('fc-cache -f -v', { stdio: 'ignore' });
-
-            console.log(green + bold + `\n  ✅ ${installedCount} fonts installed successfully!\n` + reset);
-
-        } else if (platform === 'win32') {
-            // Windows - requires admin
-            console.log(yellow + '  ⚠️  Windows font installation requires administrator rights.\n' + reset);
-            console.log('  Please run PowerShell as Administrator and execute:\n');
-
-            fontFiles.forEach(file => {
-                const source = path.join(fontDir, file).replace(/\\/g, '\\\\');
-                console.log(gray + `    Copy-Item "${source}" "C:\\Windows\\Fonts\\"` + reset);
-            });
-
-            console.log(gray + '\n  Then run: ' + cyan + 'reg add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts"' + reset);
-            console.log('');
-
-        } else {
-            console.log(red + '  ❌ Unsupported platform: ' + platform + reset);
-            process.exit(1);
-        }
-
-    } catch (error) {
-        console.log(red + '\n  ❌ Installation failed: ' + error.message + reset);
-        console.log(gray + '\n  Font files are available in:' + reset);
-        console.log(gray + `    ${fontDir}\n` + reset);
+function resolveVariantOrExit(arg, defaultVariant) {
+    const v = (arg || defaultVariant).toLowerCase();
+    if (!VARIANT_KEYS[v]) {
+        console.log(red + `\n  ❌ Unknown variant: ${arg}\n` + reset);
+        console.log(gray + '  Available variants: ' + reset + cyan + 'core, nerd, hermes, all\n' + reset);
         process.exit(1);
     }
+    return v;
 }
 
-/**
- * Uninstall fonts from system
- */
-function uninstallFonts() {
-    console.log(cyan + bold + '\n  🗑️  CodexMono Font Uninstaller\n' + reset);
+function installFonts(variantArg) {
+    const variant = resolveVariantOrExit(variantArg, 'core');
+    const fonts = getFonts(variant);
 
+    console.log(cyan + bold + `\n  🎨 CodexMono Font Installer (${variant})\n` + reset);
+
+    const targetDir = getSystemFontDir();
+    if (!targetDir) {
+        console.log(red + '  ❌ Unsupported platform: ' + platform + reset);
+        process.exit(1);
+    }
+
+    if (platform === 'win32') {
+        console.log(yellow + '  ⚠️  Windows font installation requires administrator rights.\n' + reset);
+        console.log('  Please run PowerShell as Administrator and execute:\n');
+        fonts.forEach(({ srcPath }) => {
+            const escaped = srcPath.replace(/\\/g, '\\\\');
+            console.log(gray + `    Copy-Item "${escaped}" "C:\\Windows\\Fonts\\"` + reset);
+        });
+        console.log('');
+        console.log(gray + '  Then run: ' + cyan + 'reg add "HKLM\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Fonts"\n' + reset);
+        return;
+    }
+
+    if (platform === 'linux' && !fs.existsSync(targetDir)) {
+        fs.mkdirSync(targetDir, { recursive: true });
+    }
+
+    console.log(gray + `  Installing to: ${targetDir}` + reset);
+
+    let installedCount = 0;
+    let missingCount = 0;
     try {
-        if (platform === 'darwin') {
-            // macOS
-            const targetDir = path.join(os.homedir(), 'Library', 'Fonts');
-
-            let removedCount = 0;
-            fontFiles.forEach(file => {
-                const target = path.join(targetDir, file);
-
-                if (fs.existsSync(target)) {
-                    fs.unlinkSync(target);
-                    console.log(green + `  ✓ Removed ${file}` + reset);
-                    removedCount++;
-                }
-            });
-
-            if (removedCount > 0) {
-                console.log(green + bold + `\n  ✅ ${removedCount} fonts uninstalled.\n` + reset);
+        fonts.forEach(({ file, srcPath }) => {
+            if (fs.existsSync(srcPath)) {
+                fs.copyFileSync(srcPath, path.join(targetDir, file));
+                console.log(green + `  ✓ ${file}` + reset);
+                installedCount++;
             } else {
-                console.log(yellow + '  ℹ️  No CodexMono fonts found in system.\n' + reset);
+                console.log(yellow + `  ⚠ Missing source: ${path.relative(pkgRoot, srcPath)}` + reset);
+                missingCount++;
             }
+        });
+    } catch (error) {
+        console.log(red + '\n  ❌ Installation failed: ' + error.message + reset);
+        process.exit(1);
+    }
 
-        } else if (platform === 'linux') {
-            // Linux
-            const targetDir = path.join(os.homedir(), '.local', 'share', 'fonts');
+    if (platform === 'linux' && installedCount > 0) {
+        console.log(gray + '\n  Refreshing font cache...' + reset);
+        refreshLinuxFontCache();
+    }
 
-            let removedCount = 0;
-            fontFiles.forEach(file => {
-                const target = path.join(targetDir, file);
+    console.log(green + bold + `\n  ✅ ${installedCount} fonts installed successfully!` + reset);
+    if (missingCount > 0) {
+        console.log(yellow + `  ⚠ ${missingCount} fonts missing from package (reinstall with ${cyan}npm install -g @monolex/codexmono@latest${yellow}).` + reset);
+    }
+    console.log('');
+    console.log(gray + '  You can now use CodexMono in:' + reset);
+    console.log(gray + '    • VS Code (set "editor.fontFamily": "CodexMono")' + reset);
+    console.log(gray + '    • Terminal' + reset);
+    console.log(gray + '    • Any application\n' + reset);
+}
 
-                if (fs.existsSync(target)) {
-                    fs.unlinkSync(target);
-                    console.log(green + `  ✓ Removed ${file}` + reset);
-                    removedCount++;
-                }
-            });
+function uninstallFonts(variantArg) {
+    const variant = resolveVariantOrExit(variantArg, 'all');
+    const fonts = getFonts(variant);
 
-            if (removedCount > 0) {
-                // Refresh font cache
-                console.log(gray + '\n  Refreshing font cache...' + reset);
-                execSync('fc-cache -f -v', { stdio: 'ignore' });
-                console.log(green + bold + `\n  ✅ ${removedCount} fonts uninstalled.\n` + reset);
-            } else {
-                console.log(yellow + '  ℹ️  No CodexMono fonts found in system.\n' + reset);
+    console.log(cyan + bold + `\n  🗑️  CodexMono Font Uninstaller (${variant})\n` + reset);
+
+    const targetDir = getSystemFontDir();
+    if (!targetDir) {
+        console.log(red + '  ❌ Unsupported platform: ' + platform + reset);
+        process.exit(1);
+    }
+
+    if (platform === 'win32') {
+        console.log(yellow + '  ⚠️  Windows font uninstallation requires administrator rights.\n' + reset);
+        console.log('  Please remove these files manually from C:\\Windows\\Fonts\\:\n');
+        fonts.forEach(({ file }) => console.log(gray + `    ${file}` + reset));
+        console.log('');
+        return;
+    }
+
+    let removedCount = 0;
+    try {
+        fonts.forEach(({ file }) => {
+            const target = path.join(targetDir, file);
+            if (fs.existsSync(target)) {
+                fs.unlinkSync(target);
+                console.log(green + `  ✓ Removed ${file}` + reset);
+                removedCount++;
             }
-
-        } else if (platform === 'win32') {
-            // Windows
-            console.log(yellow + '  ⚠️  Windows font uninstallation requires administrator rights.\n' + reset);
-            console.log('  Please remove fonts manually from C:\\Windows\\Fonts\\\n');
-
-        } else {
-            console.log(red + '  ❌ Unsupported platform: ' + platform + reset);
-            process.exit(1);
-        }
-
+        });
     } catch (error) {
         console.log(red + '\n  ❌ Uninstallation failed: ' + error.message + reset);
         process.exit(1);
     }
+
+    if (removedCount === 0) {
+        console.log(yellow + `  ℹ️  No CodexMono ${variant} fonts found in system.\n` + reset);
+        return;
+    }
+
+    if (platform === 'linux') {
+        console.log(gray + '\n  Refreshing font cache...' + reset);
+        refreshLinuxFontCache();
+    }
+
+    console.log(green + bold + `\n  ✅ ${removedCount} fonts uninstalled.\n` + reset);
 }
 
-/**
- * List installed fonts
- */
 function listFonts() {
     console.log(cyan + bold + '\n  📋 CodexMono Font Status\n' + reset);
 
-    let targetDir;
-
-    if (platform === 'darwin') {
-        targetDir = path.join(os.homedir(), 'Library', 'Fonts');
-    } else if (platform === 'linux') {
-        targetDir = path.join(os.homedir(), '.local', 'share', 'fonts');
-    } else if (platform === 'win32') {
-        targetDir = 'C:\\Windows\\Fonts';
-    } else {
+    const targetDir = getSystemFontDir();
+    if (!targetDir) {
         console.log(red + '  ❌ Unsupported platform: ' + platform + reset);
         process.exit(1);
     }
 
     console.log(gray + `  System font directory: ${targetDir}\n` + reset);
 
-    let installedCount = 0;
-    fontFiles.forEach(file => {
-        const target = path.join(targetDir, file);
-        const isInstalled = fs.existsSync(target);
+    let totalInstalled = 0;
+    let totalFonts = 0;
 
-        if (isInstalled) {
-            console.log(green + `  ✓ ${file}` + reset + gray + ' (installed)' + reset);
-            installedCount++;
-        } else {
-            console.log(gray + `  ○ ${file}` + reset + gray + ' (not installed)' + reset);
-        }
-    });
+    for (const variant of ['core', 'nerd', 'hermes']) {
+        const fonts = getFonts(variant);
+        const installedFonts = fonts.filter(({ file }) => fs.existsSync(path.join(targetDir, file)));
+        const installed = installedFonts.length;
+        totalInstalled += installed;
+        totalFonts += fonts.length;
 
-    console.log('');
-    if (installedCount === fontFiles.length) {
-        console.log(green + `  ✅ All ${fontFiles.length} fonts are installed.\n` + reset);
-    } else if (installedCount > 0) {
-        console.log(yellow + `  ⚠️  ${installedCount}/${fontFiles.length} fonts installed.\n` + reset);
+        const mark = installed === fonts.length ? green + '✓ ' :
+                     installed > 0              ? yellow + '◐ ' :
+                                                   gray + '○ ';
+        console.log(`  ${mark}${variant.padEnd(8)}${reset} ${gray}(${installed}/${fonts.length})${reset}`);
+
+        fonts.forEach(({ file }) => {
+            const isInstalled = fs.existsSync(path.join(targetDir, file));
+            const m   = isInstalled ? green + '  ✓' : gray + '  ○';
+            const tag = isInstalled ? gray + '(installed)' + reset
+                                    : gray + '(not installed)' + reset;
+            console.log(`${m} ${file}${reset}  ${tag}`);
+        });
+        console.log('');
+    }
+
+    if (totalInstalled === totalFonts) {
+        console.log(green + bold + `  ✅ All ${totalFonts} fonts installed.\n` + reset);
+    } else if (totalInstalled > 0) {
+        console.log(yellow + `  ⚠️  ${totalInstalled}/${totalFonts} fonts installed.` + reset);
+        console.log(gray + `     Install missing variants with: ${cyan}codexmono install <variant>${reset}\n`);
     } else {
-        console.log(gray + `  ℹ️  No fonts installed. Run: ${cyan}codexmono install${reset}\n`);
+        console.log(gray + `  ℹ️  No fonts installed. Run: ${cyan}codexmono install [variant]${reset}\n`);
     }
 }
 
-/**
- * Show help
- */
 function showHelp() {
+    // Single source of truth: initiate/initiate.md (mirrors the mono-family
+    // `include_str!("initiate/initiate.md")` pattern, read at runtime for JS).
+    const initiatePath = path.join(pkgRoot, 'initiate', 'initiate.md');
+    if (fs.existsSync(initiatePath)) {
+        const pkg = require('../package.json');
+        const doc = fs.readFileSync(initiatePath, 'utf8').replace(/\{VERSION\}/g, pkg.version);
+        process.stdout.write('\n' + doc + '\n');
+        return;
+    }
+
+    // Fallback if initiate.md is missing from the package
     console.log(cyan + bold + '\n  CodexMono CLI - Font Installation Tool\n' + reset);
     console.log('  Usage:');
-    console.log(cyan + '    codexmono' + reset + '              Install fonts (default)');
-    console.log(cyan + '    codexmono install' + reset + '      Install fonts to system');
-    console.log(cyan + '    codexmono uninstall' + reset + '    Remove fonts from system');
-    console.log(cyan + '    codexmono list' + reset + '         List installed fonts');
-    console.log(cyan + '    codexmono --help' + reset + '       Show this help');
-    console.log(cyan + '    codexmono --version' + reset + '    Show version\n');
+    console.log(cyan + '    codexmono' + reset + '                       Install core fonts (default)');
+    console.log(cyan + '    codexmono install [variant]' + reset + '     Install fonts (default: core)');
+    console.log(cyan + '    codexmono uninstall [variant]' + reset + '   Remove fonts (default: all)');
+    console.log(cyan + '    codexmono list' + reset + '                  Show install status of all variants');
+    console.log(cyan + '    codexmono --help' + reset + '                Show this help');
+    console.log(cyan + '    codexmono --version' + reset + '             Show version\n');
 
-    console.log('  Examples:');
-    console.log(gray + '    # Install globally and run' + reset);
-    console.log(gray + '    npm install -g @monolex/codexmono' + reset);
-    console.log(gray + '    codexmono\n' + reset);
-
-    console.log(gray + '    # Or use npx (no install)' + reset);
-    console.log(gray + '    npx @monolex/codexmono\n' + reset);
-
-    console.log('  Website: ' + cyan + 'https://monolex.ai/with/codexmono' + reset);
-    console.log('  GitHub:  ' + cyan + 'https://github.com/monolex/codexmono\n' + reset);
+    console.log('  Variants: core | nerd | hermes | all');
+    console.log('  Website:  ' + cyan + 'https://monolex.ai/with/codexmono\n' + reset);
 }
 
-/**
- * Show version
- */
 function showVersion() {
     const packageJson = require('../package.json');
     console.log(cyan + `  CodexMono v${packageJson.version}\n` + reset);
 }
 
-// Main command router
+// Parse: argv[2] = command, argv[3] = optional variant arg
+const command = process.argv[2] || 'install';
+const arg = process.argv[3];
+
+// Preserve legacy postinstall banner behavior:
+// show banner only when invoked as bare `install` with no variant
+if (command === 'install' && !arg) {
+    const postinstallPath = path.join(pkgRoot, 'postinstall.js');
+    if (fs.existsSync(postinstallPath)) {
+        require(postinstallPath);
+    }
+}
+
 switch (command) {
-    case 'install':
-        installFonts();
-        break;
-
-    case 'uninstall':
-        uninstallFonts();
-        break;
-
-    case 'list':
-        listFonts();
-        break;
-
+    case 'install':   installFonts(arg);   break;
+    case 'uninstall': uninstallFonts(arg); break;
+    case 'list':      listFonts();         break;
     case '--help':
     case '-h':
-    case 'help':
-        showHelp();
-        break;
-
+    case 'help':      showHelp();          break;
     case '--version':
     case '-v':
-    case 'version':
-        showVersion();
-        break;
-
+    case 'version':   showVersion();       break;
     default:
         console.log(red + `\n  ❌ Unknown command: ${command}\n` + reset);
         showHelp();

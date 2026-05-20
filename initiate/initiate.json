@@ -1,0 +1,9 @@
+{
+  "name": "codexmono",
+  "skill_name": null,
+  "files": {
+    "initiate.md": { "role": "cli-help", "include_in_binary": false, "loaded_at": "runtime" }
+  },
+  "pairs_with": ["monogrid"],
+  "note": "Passive font asset — no AI skill. Font install is a one-time user-driven setup with no recurring autonomous trigger, so SKILL.md is intentionally omitted. monogrid (the alignment validator for CodexMono) carries the agent-facing skill and references codexmono via pairs_with."
+}

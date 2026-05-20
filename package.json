@@ -14,7 +14,8 @@
     "bin/",
     "css/",
     "licenses/",
-    "docs/"
+    "docs/",
+    "initiate/"
   ],
   "keywords": [
     "font",
