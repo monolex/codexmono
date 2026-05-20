@@ -26,9 +26,15 @@ Root command shows the command map; installation is explicit.
 ```
 codexmono                       Show the command map (this hub)
 codexmono install <target>      Install a font family (default: core)
-codexmono uninstall <target>    Remove a font family (default: core)
+codexmono uninstall [target]    Remove a font family (default: all)
 codexmono list [target]         Show install status (default: all)
+codexmono info [target]         Show family metadata (chars, size, paths)
+codexmono path <target>         Print font file paths (--woff2 for web)
+codexmono css [target]          Print @font-face CSS for web use
+codexmono verify [target]       Check SHA256 against CHECKSUMS.md
 codexmono version               Show CLI version
+
+Flags:  --json (info, verify)   --woff2 (path)
 ```
 
 ## FAMILIES (targets)

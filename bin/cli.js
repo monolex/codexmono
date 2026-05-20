@@ -21,8 +21,29 @@ const bold = "\x1b[1m";
 const headerWidth = 52;
 
 const platform = os.platform();
-const command = process.argv[2] || "help";
-const rawTarget = process.argv[3];
+
+const argv = process.argv.slice(2);
+const command = argv[0] || "help";
+const flagSet = new Set(argv.filter((a) => a.startsWith("--")));
+const rawTarget = argv.slice(1).find((a) => !a.startsWith("-"));
+const jsonOut = flagSet.has("--json");
+const wantWoff2 = flagSet.has("--woff2");
+
+// Rich per-variant metadata — single source of truth for info/path/css/verify.
+const fontMeta = require("../index.js").fonts;
+const metaByFile = {};
+for (const metaKey of Object.keys(fontMeta)) {
+  const m = fontMeta[metaKey];
+  metaByFile[path.basename(m.ttf)] = Object.assign({ key: metaKey }, m);
+}
+
+function woff2SourceFor(entry) {
+  const m = metaByFile[entry.file];
+  if (m && m.woff2) {
+    return path.join(__dirname, "..", m.woff2.replace(/^\.\//, ""));
+  }
+  return entry.source.replace("/ttf/", "/woff2/").replace(/\.ttf$/, ".woff2");
+}
 
 function makeEntry(relativeParts, file) {
   return {
@@ -257,7 +278,10 @@ function installFonts(raw) {
 }
 
 function uninstallFonts(raw) {
-  const target = resolveTarget(raw, "core");
+  // Default to "all": a bare `codexmono uninstall` removes every CodexMono
+  // family, matching user intent to fully remove the fonts (install defaults
+  // to the minimal "core").
+  const target = resolveTarget(raw, "all");
   const entries = entriesFor(target);
   const targetDir = getSystemFontDir();
   const targetLabel = target === "all" ? "All Fonts" : fontGroups[target].label;
@@ -533,12 +557,50 @@ function showHelp() {
   );
   console.log(
     cyan +
+      "  codexmono info [target]" +
+      reset +
+      gray +
+      "      Show family metadata (chars, size, paths)" +
+      reset,
+  );
+  console.log(
+    cyan +
+      "  codexmono path <target>" +
+      reset +
+      gray +
+      "      Print font file paths (--woff2 for web)" +
+      reset,
+  );
+  console.log(
+    cyan +
+      "  codexmono css [target]" +
+      reset +
+      gray +
+      "       Print @font-face CSS for web use" +
+      reset,
+  );
+  console.log(
+    cyan +
+      "  codexmono verify [target]" +
+      reset +
+      gray +
+      "    Check SHA256 against CHECKSUMS.md" +
+      reset,
+  );
+  console.log(
+    cyan +
       "  codexmono version" +
       reset +
       gray +
       "            Show CLI version" +
       reset,
   );
+  console.log("");
+  console.log(bold + "FLAGS" + reset);
+  console.log(
+    gray + "  --json     Machine-readable output (info, verify)" + reset,
+  );
+  console.log(gray + "  --woff2    Use WOFF2 paths (path command)" + reset);
   console.log("");
   console.log(bold + "START HERE" + reset);
   console.log(yellow + "  codexmono" + reset);
@@ -559,6 +621,142 @@ function showVersion() {
   console.log(cyan + `  CodexMono v${packageJson.version}\n` + reset);
 }
 
+function infoFonts(raw) {
+  const target = resolveTarget(raw, "all");
+  const entries = entriesFor(target);
+
+  if (jsonOut) {
+    const out = entries.map((entry) => {
+      const m = metaByFile[entry.file] || {};
+      return {
+        family: m.name || entry.file.replace(/\.ttf$/, ""),
+        file: entry.file,
+        characters: m.characters != null ? m.characters : null,
+        size: m.size || null,
+        description: m.description || null,
+        ttf: entry.source,
+        woff2: woff2SourceFor(entry),
+      };
+    });
+    console.log(JSON.stringify(out, null, 2));
+    return;
+  }
+
+  console.log(cyan + bold + `\n  CodexMono Font Info - ${target}\n` + reset);
+  entries.forEach((entry) => {
+    const m = metaByFile[entry.file] || {};
+    console.log(bold + `  ${m.name || entry.file}` + reset);
+    console.log(gray + `    file:  ${entry.file}` + reset);
+    if (m.characters != null)
+      console.log(gray + `    chars: ${m.characters.toLocaleString()}` + reset);
+    if (m.size) console.log(gray + `    size:  ${m.size}` + reset);
+    if (m.description) console.log(gray + `    ${m.description}` + reset);
+    console.log("");
+  });
+}
+
+function pathFonts(raw) {
+  const target = resolveTarget(raw, "core");
+  entriesFor(target).forEach((entry) => {
+    console.log(wantWoff2 ? woff2SourceFor(entry) : entry.source);
+  });
+}
+
+function cssFonts(raw) {
+  const target = resolveTarget(raw, "all");
+  const blocks = entriesFor(target).map((entry) => {
+    const m = metaByFile[entry.file] || {};
+    const family = m.name || entry.file.replace(/\.ttf$/, "");
+    const woff2 = m.woff2 || `./fonts/ttf/${entry.file}`;
+    const ttf = m.ttf || `./fonts/ttf/${entry.file}`;
+    return [
+      "@font-face {",
+      `  font-family: '${family}';`,
+      `  src: url('${woff2}') format('woff2'),`,
+      `       url('${ttf}') format('truetype');`,
+      "  font-weight: 100 800;",
+      "  font-style: normal;",
+      "  font-display: swap;",
+      "}",
+    ].join("\n");
+  });
+  console.log(blocks.join("\n\n"));
+}
+
+function sha256File(file) {
+  const crypto = require("crypto");
+  return crypto.createHash("sha256").update(fs.readFileSync(file)).digest("hex");
+}
+
+function parseChecksums() {
+  const file = path.join(__dirname, "..", "docs", "CHECKSUMS.md");
+  const map = {};
+  if (!fs.existsSync(file)) return map;
+  const re = /^([0-9a-f]{64})\s+(\S+\.(?:ttf|woff2))\s*$/gim;
+  const text = fs.readFileSync(file, "utf8");
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    map[m[2]] = m[1].toLowerCase();
+  }
+  return map;
+}
+
+function verifyFonts(raw) {
+  const target = resolveTarget(raw, "all");
+  const checksums = parseChecksums();
+
+  const files = [];
+  entriesFor(target).forEach((entry) => {
+    files.push({ file: entry.file, source: entry.source });
+    const woff2Source = woff2SourceFor(entry);
+    files.push({ file: path.basename(woff2Source), source: woff2Source });
+  });
+
+  const results = files.map(({ file, source }) => {
+    const expected = checksums[file];
+    if (!fs.existsSync(source)) return { file, status: "missing" };
+    const actual = sha256File(source);
+    if (!expected) return { file, status: "no-checksum", actual };
+    return { file, status: actual === expected ? "ok" : "mismatch", expected, actual };
+  });
+
+  if (jsonOut) {
+    console.log(JSON.stringify(results, null, 2));
+    if (results.some((r) => r.status === "mismatch" || r.status === "missing")) {
+      process.exit(1);
+    }
+    return;
+  }
+
+  console.log(cyan + bold + `\n  CodexMono Integrity Verify - ${target}\n` + reset);
+  let ok = 0;
+  let bad = 0;
+  results.forEach((r) => {
+    if (r.status === "ok") {
+      console.log(green + `  ✓ ${r.file}` + reset);
+      ok += 1;
+    } else if (r.status === "mismatch") {
+      console.log(red + `  ✗ ${r.file} (SHA256 mismatch)` + reset);
+      bad += 1;
+    } else if (r.status === "missing") {
+      console.log(yellow + `  ! ${r.file} (file missing)` + reset);
+      bad += 1;
+    } else {
+      console.log(gray + `  ? ${r.file} (no checksum on record)` + reset);
+    }
+  });
+
+  console.log("");
+  if (bad === 0) {
+    console.log(
+      green + bold + `  Verified ${ok} files against CHECKSUMS.md.\n` + reset,
+    );
+  } else {
+    console.log(red + bold + `  ${bad} integrity problem(s) found.\n` + reset);
+    process.exit(1);
+  }
+}
+
 switch (command) {
   case "install":
     installFonts(rawTarget);
@@ -570,6 +768,22 @@ switch (command) {
 
   case "list":
     listFonts(rawTarget);
+    break;
+
+  case "info":
+    infoFonts(rawTarget);
+    break;
+
+  case "path":
+    pathFonts(rawTarget);
+    break;
+
+  case "css":
+    cssFonts(rawTarget);
+    break;
+
+  case "verify":
+    verifyFonts(rawTarget);
     break;
 
   case "--help":

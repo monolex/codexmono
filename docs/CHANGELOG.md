@@ -9,7 +9,16 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ## [Unreleased]
 
 ### Added
+- New CLI commands that surface data already bundled in the package:
+  - `info [target]` — family metadata (characters, size, description, paths) from index.js, with `--json`.
+  - `path <target>` — print absolute font paths for scripting (`--woff2` for web assets).
+  - `css [target]` — print `@font-face` declarations for web use.
+  - `verify [target]` — check installed/bundled SHA256 against `docs/CHECKSUMS.md`, with `--json`.
+- `--json` machine-readable output (info, verify) and `--woff2` path selector for automation/AI consumption.
 - `initiate/` discovery layer (`initiate.md` + `initiate.json`) for OpenCLIs/agent discovery. The banner is monogrid Q.E.D verified. No `SKILL.md`: CodexMono is a passive font asset with no recurring autonomous trigger, so the `monogrid` validator carries the agent-facing skill and references codexmono via `pairs_with`.
+
+### Changed
+- `uninstall` with no target now defaults to `all` (was `core`), so a bare `codexmono uninstall` removes every CodexMono family instead of silently leaving Nerd/Hermes installed.
 
 ### Fixed
 - Aligned lagging version strings to the published package version (index.js, CSS comment, CHECKSUMS header were stuck at 1.0.2/1.0.3).
