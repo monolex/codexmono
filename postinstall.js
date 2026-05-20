@@ -4,25 +4,8 @@
  * Displays ASCII art logo when package is installed
  */
 
-// CodexMono ASCII art logo
-const logo = [
-    '  ██████┐ ██████┐ ██████┐ ███████┐██┐  ██┐███┐   ███┐ ██████┐ ███┐   ██┐ ██████┐',
-    ' ██┌────┐██┌───██┐██┌──██┐██┌────┘└██┐██┌┘████┐ ████│██┌───██┐████┐  ██│██┌───██┐',
-    ' ██│     ██│   ██│██│  ██│█████┐   └███┌┘ ██┌████┌██│██│   ██│██┌██┐ ██│██│   ██│',
-    ' ██│     ██│   ██│██│  ██│██┌──┘   ██┌██┐ ██│└██┌┘██│██│   ██│██│└██┐██│██│   ██│',
-    ' └██████┐└██████┌┘██████┌┘███████┐██┌┘ ██┐██│ └─┘ ██│└██████┌┘██│ └████│└██████┌┘',
-    '  └─────┘ └─────┘ └─────┘ └──────┘└─┘  └─┘└─┘     └─┘ └─────┘ └─┘  └───┘ └─────┘',
-    '',
-    '         ███┐   ███┐ ██████┐ ███┐   ██┐ ██████┐ ██┐     ███████┐██┐  ██┐',
-    '         ████┐ ████│██┌───██┐████┐  ██│██┌───██┐██│     ██┌────┘└██┐██┌┘',
-    '         ██┌████┌██│██│   ██│██┌██┐ ██│██│   ██│██│     █████┐   └███┌┘',
-    '         ██│└██┌┘██│██│   ██│██│└██┐██│██│   ██│██│     ██┌──┘   ██┌██┐',
-    '         ██│ └─┘ ██│└██████┌┘██│ └████│└██████┌┘███████┐███████┐██┌┘ ██┐',
-    '         └─┘     └─┘ └─────┘ └─┘  └───┘ └─────┘ └──────┘└──────┘└─┘  └─┘'
-];
-
-const tagline = '                    A Philosophy of True Monospace Excellence';
-const version = '                                      v1.0.2';
+const packageJson = require('./package.json');
+const headerWidth = 78;
 const separator = '─'.repeat(84);
 const footer = '                   CodexMono by Monolex.AI    https://monolex.ai';
 
@@ -32,15 +15,47 @@ const gray = '\x1b[90m';
 const reset = '\x1b[0m';
 const bold = '\x1b[1m';
 
-// Display logo
+function padRight(text, width = headerWidth) {
+    if (text.length >= width) {
+        return text.slice(0, width);
+    }
+
+    return text + ' '.repeat(width - text.length);
+}
+
+function boxTop() {
+    return '╔' + '═'.repeat(headerWidth) + '╗';
+}
+
+function boxBottom() {
+    return '╚' + '═'.repeat(headerWidth) + '╝';
+}
+
+function boxLine(text = '') {
+    return `║${padRight(text)}║`;
+}
+
+const header = [
+    boxTop(),
+    boxLine(''),
+    boxLine('   █▀▀▀ █▀▀█ █▀▀▄ █▀▀▀ ▀▄▀ █▄ ▄█ █▀▀█ █▀▀▄ █▀▀█'),
+    boxLine('   █    █  █ █  █ █▀▀   █  █ ▀ █ █  █ █  █ █  █'),
+    boxLine('   ▀▀▀▀ ▀▀▀▀ ▀▀▀  ▀▀▀▀ ▀   ▀   ▀ ▀▀▀▀ ▀  ▀ ▀▀▀▀'),
+    boxLine(''),
+    boxLine('   True Monospace Font Hub'),
+    boxLine('   Core Fonts / Nerd Fonts / Set of Hermes'),
+    boxLine('   by Monolex https://monolex.ai'),
+    boxLine(''),
+    boxBottom()
+];
+
+// Display header
 console.log('');
-console.log(cyan + bold);
-logo.forEach(line => console.log('  ' + line));
-console.log(reset);
+console.log(cyan + bold + header.join('\n') + reset);
 
 // Display info
-console.log(gray + '  ' + tagline + reset);
-console.log(gray + '  ' + version + reset);
+console.log(gray + '                      A Philosophy of True Monospace Excellence' + reset);
+console.log(gray + `                                      v${packageJson.version}` + reset);
 console.log('');
 console.log(gray + '  ' + separator + reset);
 console.log('');
@@ -91,29 +106,39 @@ console.log(gray + '  Learn more: https://monolex.ai\n' + reset);
 console.log(gray + '  ' + separator + reset);
 console.log('');
 
-// Installation command (FIRST - most important!)
-console.log(cyan + '  ◆ ' + reset + 'Install fonts to your system');
+// Command map (FIRST - most important!)
+console.log(cyan + '  ◆ ' + reset + 'Command map');
 console.log('');
-console.log('    Run this command to install fonts:');
-console.log(cyan + '      codexmono' + reset);
+console.log('    Start with:');
+console.log(cyan + '      codexmono' + reset + gray + '               # Show command guide' + reset);
 console.log('');
-console.log(gray + '    Or use specific commands:' + reset);
-console.log(gray + '      codexmono install   ' + reset + '- Install fonts');
-console.log(gray + '      codexmono uninstall ' + reset + '- Remove fonts');
-console.log(gray + '      codexmono list      ' + reset + '- List installed fonts');
+console.log(gray + '    Install bundled families explicitly:' + reset);
+console.log(gray + '      codexmono install core   ' + reset + '- Install Core Fonts');
+console.log(gray + '      codexmono install nerd   ' + reset + '- Install Nerd Fonts');
+console.log(gray + '      codexmono install hermes ' + reset + '- Install Set of Hermes');
+console.log(gray + '      codexmono install all    ' + reset + '- Install every bundled set');
+console.log('');
+console.log(gray + '    Manage installed fonts:' + reset);
+console.log(gray + '      codexmono list all       ' + reset + '- Show status of bundled fonts');
+console.log(gray + '      codexmono uninstall all  ' + reset + '- Remove bundled families');
 console.log('');
 console.log(gray + '  ' + separator + reset);
 console.log('');
 
 // Font info (SECOND - details)
-console.log(cyan + '  ◆ ' + reset + 'Font files downloaded');
+console.log(cyan + '  ◆ ' + reset + 'Font sets bundled');
 console.log('');
-console.log(gray + '    • CodexMono.ttf' + reset + '             - Latin only (648 KB)');
-console.log(gray + '    • CodexMono-KR.ttf' + reset + '          - Korean/Japanese (5.8 MB)');
-console.log(gray + '    • CodexMono-EA.ttf' + reset + '          - Complete East Asia (18 MB)');
-console.log(gray + '    • CodexMono-Traditional.ttf' + reset + ' - East Asia with Traditional Chinese (17 MB)');
-console.log(gray + '    • fonts/nerd/*' + reset + '                - Nerd compatibility-layer variants');
-console.log(gray + '    • fonts/hermes/*' + reset + '              - Hermes integrated messenger-family variants');
+console.log(gray + '    • Core Fonts' + reset);
+console.log(gray + '      CodexMono.ttf' + reset + '             - Latin only (648 KB)');
+console.log(gray + '      CodexMono-KR.ttf' + reset + '          - Korean/Japanese (5.8 MB)');
+console.log(gray + '      CodexMono-EA.ttf' + reset + '          - Complete East Asia (18 MB)');
+console.log(gray + '      CodexMono-Traditional.ttf' + reset + ' - East Asia with Traditional Chinese (17 MB)');
+console.log('');
+console.log(gray + '    • Nerd Fonts' + reset + '               - Compatibility-layer symbol variants');
+console.log(gray + '      fonts/nerd/*' + reset);
+console.log('');
+console.log(gray + '    • Set of Hermes' + reset + '            - Nerd + emoji + more Unicode');
+console.log(gray + '      fonts/hermes/*' + reset);
 console.log('');
 console.log(gray + '    WOFF2 files also included for web use.' + reset);
 console.log('');

@@ -268,7 +268,7 @@ Files:
 
 `Hermes` is the messenger family: `Nerd + Emoji + more Unicode`.
 The name is meant as the bridge between AI and Human, not as the label of one fixed emoji source.
-The current `1.0.2` release builds Hermes on top of the Nerd compatibility layer and adds the first integrated emoji source layer, normalized to CodexMono's 1200-unit wide-cell rule for added emoji.
+The current `1.0.3` release builds Hermes on top of the Nerd compatibility layer and adds the first integrated emoji source layer, normalized to CodexMono's 1200-unit wide-cell rule for added emoji.
 
 Files:
 - `fonts/hermes/ttf/CodexMono-Hermes.ttf`
@@ -279,7 +279,7 @@ Files:
 WOFF2 artifacts for both `Nerd` and `Hermes` are bundled under `fonts/nerd/woff2` and `fonts/hermes/woff2`.
 
 Current build note:
-- `1.0.2` uses `Noto Emoji` static weight `300` as the current upstream source for Hermes' integrated emoji layer.
+- `1.0.3` uses `Noto Emoji` static weight `300` as the current upstream source for Hermes' integrated emoji layer.
 - Future Hermes builds may experiment with alternate emoji sources while keeping the public Hermes family identity.
 
 ---
@@ -292,18 +292,22 @@ Current build note:
 # Install globally
 npm install -g @monolex/codexmono
 
-# Run installer
+# Open the command guide first
 codexmono
 
-# Or install specific variant
-codexmono install
+# Install a specific bundled family
+codexmono install core
+codexmono install nerd
+codexmono install hermes
+codexmono install all
 ```
 
 The CLI will:
-- Automatically detect your OS (macOS, Linux, Windows)
-- Install fonts to the correct system directory
-- Verify installation
-- Provide configuration examples
+- Show the command hub first instead of installing immediately
+- Let you choose `core`, `nerd`, `hermes`, or `all`
+- Detect your OS (macOS, Linux, Windows)
+- Install fonts to the correct system directory when you run `install`
+- Let you check status with `codexmono list all`
 
 ### Manual Installation
 

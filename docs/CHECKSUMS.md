@@ -1,7 +1,7 @@
 # CodexMono Font Files - SHA256 Checksums
 
-**Generated**: 2026-03-09 03:11 UTC
-**Version**: 1.0.2
+**Generated**: 2026-03-10 01:19 UTC
+**Version**: 1.0.3
 
 ## TTF
 
@@ -42,6 +42,8 @@ c0b1f24a2f016c329ac2ffcb0bbdae94bd885616bf3a45183df5d24cd933aa21  CodexMono-Trad
 ```
 72a2dffc622892908a080db499b6a03ad96ea35d53658affe1cb5861ab049932  monolex-codexmono-1.0.0.tgz
 bcb8ab0377abb495407bd0789870356f4c7d8c0dd1462ff7185374278d34ae8e  monolex-codexmono-1.0.1.tgz
+a3f662ff0966844cbbd10c5b9bc60a4f479de1925a61d974a2383f5bb2fa734a  monolex-codexmono-1.0.2.tgz
+6306205db473e62508043edfe739eae396a320c639d9ff04e5ce6feb2587637d  monolex-codexmono-1.0.3.tgz
 ```
 
 ## Notes

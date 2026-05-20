@@ -1,17 +1,19 @@
-╔═══════════════════════════════════════════════════════════════╗
-║                                                               ║
-║  █▀▀ █▀▀█ █▀▀▄ █▀▀ █ █ █▄ ▄█ █▀▀█ █▀▀▄ █▀▀█  True Monospace   ║
-║  █   █  █ █  █ █▀▀ ▄▀▄ █ ▀ █ █  █ █  █ █  █  600-unit Brick   ║
-║  ▀▀▀ ▀▀▀▀ ▀▀▀  ▀▀▀ ▀ ▀ ▀   ▀ ▀▀▀▀ ▀  ▀ ▀▀▀▀  Human + AI       ║
-║                                                               ║
-║  Font family installer — Latin/CJK/Nerd/Hermes                ║
-║  by Monolex — https://monolex.ai                              ║
-╚═══════════════════════════════════════════════════════════════╝
+╔═══════════════════════════════════════════════════════╗
+║                                                       ║
+║   █▀▀▀ █▀▀█ █▀▀▄ █▀▀▀ ▀█ █▀ █▄ ▄█ █▀▀█ █▀▀▄ █▀▀█      ║
+║   █    █  █ █  █ █▀▀   ▄▀▄  █ ▀ █ █  █ █  █ █  █      ║
+║   ▀▀▀▀ ▀▀▀▀ ▀▀▀  ▀▀▀▀ ▀▀ ▀▀ ▀   ▀ ▀▀▀▀ ▀  ▀ ▀▀▀▀      ║
+║                                                       ║
+║   True Monospace Font Hub                             ║
+║   Core Fonts / Nerd Fonts / Set of Hermes             ║
+║   by Monolex https://monolex.ai                       ║
+║                                                       ║
+╚═══════════════════════════════════════════════════════╝
 
 codexmono v{VERSION}
 
 CodexMono — A Philosophy of True Monospace Excellence.
-Install the CodexMono font family (Latin + CJK + Nerd + Hermes) to your system.
+Root command shows the command map; installation is explicit.
 
 > "This is not a font. This is a brick."
 > One brick = 600 units = one unit of trust. East Asian = 1200 units (1:2 ratio).
@@ -22,25 +24,24 @@ Install the CodexMono font family (Latin + CJK + Nerd + Hermes) to your system.
 ## USAGE
 
 ```
-codexmono                       Install core fonts (default)
-codexmono install [variant]     Install fonts (default: core)
-codexmono uninstall [variant]   Remove fonts (default: all)
-codexmono list                  Show install status of all variants
-codexmono --help                Show this help
-codexmono --version             Show version
+codexmono                       Show the command map (this hub)
+codexmono install <target>      Install a font family (default: core)
+codexmono uninstall <target>    Remove a font family (default: core)
+codexmono list [target]         Show install status (default: all)
+codexmono version               Show CLI version
 ```
 
-## VARIANTS
+## FAMILIES (targets)
 
 ```
-core     Latin + CJK base       CodexMono, -KR, -Traditional, -EA     (4 fonts)
-nerd     + terminal symbols     Nerd-compatible icon coverage          (4 fonts)
-hermes   + emoji + Unicode      Nerd + emoji messenger family          (4 fonts)
-all      everything             core + nerd + hermes                  (12 fonts)
+core     Core Fonts      Base CodexMono — Latin + CJK coverage     (4 fonts)
+nerd     Nerd Fonts      Compatibility layer + terminal symbols    (4 fonts)
+hermes   Set of Hermes   Messenger family: Nerd + emoji + Unicode  (4 fonts)
+all      Everything      core + nerd + hermes                     (12 fonts)
 ```
 
-| Variant | Chars | TTF size | Coverage |
-|---------|------:|---------:|----------|
+| Target | Chars | TTF size | Coverage |
+|--------|------:|---------:|----------|
 | core (CodexMono) | 4,007 | 0.65 MB | Latin, Greek, Cyrillic, math, box drawing |
 | core (CodexMono-KR) | 15,132 | 5.83 MB | + Korean Hangul, Japanese Kana |
 | core (CodexMono-Traditional) | 33,726 | 17.18 MB | + Traditional Chinese |
@@ -51,23 +52,13 @@ all      everything             core + nerd + hermes                  (12 fonts)
 ## EXAMPLES
 
 ```bash
-# Install core (Latin + CJK) — most users
-codexmono install
-
-# Install Nerd icons (powerline, devicons, etc.)
-codexmono install nerd
-
-# Install Hermes (emoji + Nerd + extended Unicode)
-codexmono install hermes
-
-# Install everything (12 fonts)
-codexmono install all
-
-# Check what's installed
-codexmono list
-
-# Remove only the Nerd variant
-codexmono uninstall nerd
+codexmono                       # command map first (no install)
+codexmono install core          # Latin + CJK base (4 fonts)
+codexmono install nerd          # Nerd icons (4 fonts)
+codexmono install hermes        # Set of Hermes: emoji + Nerd (4 fonts)
+codexmono install all           # everything (12 fonts)
+codexmono list all              # status of every family
+codexmono uninstall nerd        # remove only the Nerd family
 ```
 
 ## INSTALL PATHS
@@ -88,13 +79,12 @@ Windows  C:\Windows\Fonts\       (prints Admin PowerShell commands)
 }
 ```
 
-CodexMono is a Variable Font (weight 100–800). One file, all weights:
-`font-variation-settings: "wght" 450;`
+CodexMono is a Variable Font (weight 100–800): `font-variation-settings: "wght" 450;`
 
 ## WEB USE
 
-WOFF2 artifacts ship alongside every TTF under `fonts/**/woff2/`.
-Ready-made `@font-face` declarations: `css/codexmono.css` (12 families + weight utility classes).
+WOFF2 ships alongside every TTF under `fonts/**/woff2/`.
+Ready-made `@font-face` declarations: `css/codexmono.css` (12 families + weight utilities).
 
 ## PAIRS WITH
 
@@ -107,6 +97,7 @@ monogrid   Verify ASCII box alignment against CodexMono's Q.E.D Unicode widths.
 
 ```bash
 npm install -g @monolex/codexmono     # then: codexmono
+npx @monolex/codexmono install all    # or run without installing
 ```
 
 ## LINKS
@@ -118,4 +109,5 @@ npm       https://www.npmjs.com/package/@monolex/codexmono
 License   SIL Open Font License 1.1
 ```
 
+Lay the brick first, then choose the family.
 CodexMono™ by Monolex.AI (Umzikim Inc.)

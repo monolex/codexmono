@@ -1,10 +1,10 @@
 {
   "name": "@monolex/codexmono",
-  "version": "1.0.2",
+  "version": "1.0.4",
   "description": "Professional monospace variable font family for multilingual development with CJK, Nerd, and Hermes emoji support",
   "main": "index.js",
   "bin": {
-    "codexmono": "./bin/cli.js"
+    "codexmono": "bin/cli.js"
   },
   "files": [
     "fonts/",
@@ -40,7 +40,7 @@
   "license": "OFL-1.1",
   "repository": {
     "type": "git",
-    "url": "https://github.com/monolex/codexmono.git"
+    "url": "git+https://github.com/monolex/codexmono.git"
   },
   "bugs": {
     "url": "https://github.com/monolex/codexmono/issues"
