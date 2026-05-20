@@ -14,7 +14,10 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   - `path <target>` — print absolute font paths for scripting (`--woff2` for web assets).
   - `css [target]` — print `@font-face` declarations for web use.
   - `verify [target]` — check installed/bundled SHA256 against `docs/CHECKSUMS.md`, with `--json`.
-- `--json` machine-readable output (info, verify) and `--woff2` path selector for automation/AI consumption.
+  - `config <editor>` — generate font config for vscode/kitty/alacritty/wezterm/ghostty/vim/neovim/iterm2/jetbrains/terminal.
+  - `doctor` — diagnose install state, package integrity, and stray/foreign CodexMono fonts.
+  - `which <char|U+XXXX>` and `chars <text>` — Unicode coverage queries via a self-contained TrueType cmap reader (formats 4 + 12, no native/Python deps; cross-validated against fontTools).
+- `--json` machine-readable output (info, verify, which, chars) and `--woff2` path selector for automation/AI consumption.
 - `initiate/` discovery layer (`initiate.md` + `initiate.json`) for OpenCLIs/agent discovery. The banner is monogrid Q.E.D verified. No `SKILL.md`: CodexMono is a passive font asset with no recurring autonomous trigger, so the `monogrid` validator carries the agent-facing skill and references codexmono via `pairs_with`.
 
 ### Changed

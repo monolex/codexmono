@@ -32,9 +32,22 @@ codexmono info [target]         Show family metadata (chars, size, paths)
 codexmono path <target>         Print font file paths (--woff2 for web)
 codexmono css [target]          Print @font-face CSS for web use
 codexmono verify [target]       Check SHA256 against CHECKSUMS.md
+codexmono config <editor>       Editor/terminal config snippet
+codexmono doctor                Diagnose install + integrity
+codexmono which <char>          Which families contain a character
+codexmono chars <text>          Per-character coverage report
 codexmono version               Show CLI version
 
-Flags:  --json (info, verify)   --woff2 (path)
+Flags:  --json (info, verify, which, chars)   --woff2 (path)
+config editors: vscode, kitty, alacritty, wezterm, ghostty, vim, neovim, iterm2, jetbrains, terminal
+```
+
+## COVERAGE QUERIES
+
+```
+codexmono which 한              # which families render U+D55C
+codexmono which U+1F600         # by codepoint (emoji → Set of Hermes only)
+codexmono chars "Hello 한글 ✓"  # per-character coverage across all 12 fonts
 ```
 
 ## FAMILIES (targets)

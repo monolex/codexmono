@@ -25,7 +25,9 @@ const platform = os.platform();
 const argv = process.argv.slice(2);
 const command = argv[0] || "help";
 const flagSet = new Set(argv.filter((a) => a.startsWith("--")));
-const rawTarget = argv.slice(1).find((a) => !a.startsWith("-"));
+const positionals = argv.slice(1).filter((a) => !a.startsWith("-"));
+const rawTarget = positionals[0];
+const rawTarget2 = positionals[1];
 const jsonOut = flagSet.has("--json");
 const wantWoff2 = flagSet.has("--woff2");
 
@@ -589,6 +591,38 @@ function showHelp() {
   );
   console.log(
     cyan +
+      "  codexmono config <editor>" +
+      reset +
+      gray +
+      "    Editor/terminal config snippet" +
+      reset,
+  );
+  console.log(
+    cyan +
+      "  codexmono doctor" +
+      reset +
+      gray +
+      "             Diagnose install + integrity" +
+      reset,
+  );
+  console.log(
+    cyan +
+      "  codexmono which <char>" +
+      reset +
+      gray +
+      "       Which families contain a character" +
+      reset,
+  );
+  console.log(
+    cyan +
+      "  codexmono chars <text>" +
+      reset +
+      gray +
+      "       Per-character coverage report" +
+      reset,
+  );
+  console.log(
+    cyan +
       "  codexmono version" +
       reset +
       gray +
@@ -598,7 +632,7 @@ function showHelp() {
   console.log("");
   console.log(bold + "FLAGS" + reset);
   console.log(
-    gray + "  --json     Machine-readable output (info, verify)" + reset,
+    gray + "  --json     Machine-readable output (info, verify, which, chars)" + reset,
   );
   console.log(gray + "  --woff2    Use WOFF2 paths (path command)" + reset);
   console.log("");
@@ -757,6 +791,339 @@ function verifyFonts(raw) {
   }
 }
 
+function configFor(editorArg, target) {
+  const editor = (editorArg || "").toLowerCase();
+  const familyByTarget = {
+    core: "CodexMono",
+    nerd: "CodexMono Nerd",
+    hermes: "CodexMono Hermes",
+  };
+  const fam = target && familyByTarget[target] ? familyByTarget[target] : "CodexMono EA";
+  const escVim = fam.replace(/ /g, "\\ ");
+
+  const editors = {
+    vscode: () =>
+      "// VS Code settings.json\n" +
+      JSON.stringify(
+        {
+          "editor.fontFamily": `'${fam}', monospace`,
+          "editor.fontLigatures": false,
+          "terminal.integrated.fontFamily": fam,
+        },
+        null,
+        2,
+      ),
+    kitty: () => `# kitty.conf\nfont_family ${fam}\nfont_size 13.0`,
+    alacritty: () =>
+      `# alacritty.toml\n[font]\nsize = 13.0\n\n[font.normal]\nfamily = "${fam}"\nstyle = "Regular"`,
+    wezterm: () =>
+      `-- wezterm.lua\nconfig.font = wezterm.font("${fam}")\nconfig.font_size = 13.0`,
+    ghostty: () => `# ghostty config\nfont-family = ${fam}\nfont-size = 13`,
+    vim: () => `" .vimrc (GUI)\nset guifont=${escVim}:h14`,
+    neovim: () => `-- init.lua (GUI)\nvim.o.guifont = "${fam}:h14"`,
+    iterm2: () =>
+      `iTerm2 (GUI):\n  Settings -> Profiles -> Text -> Font\n  Font: ${fam}    Size: 13`,
+    jetbrains: () =>
+      `JetBrains IDEs (GUI):\n  Settings -> Editor -> Font\n  Font: ${fam}    Size: 14`,
+    terminal: () =>
+      `macOS Terminal (GUI):\n  Settings -> Profiles -> Text -> Font -> Change...\n  Family: ${fam}    Size: 13`,
+  };
+
+  if (!editors[editor]) {
+    console.log(red + `\n  Unknown editor: ${editorArg || "(none)"}\n` + reset);
+    console.log(
+      gray + "  Supported: " + Object.keys(editors).join(", ") + "\n" + reset,
+    );
+    console.log(gray + "  Usage: codexmono config <editor> [core|nerd|hermes]\n" + reset);
+    process.exit(1);
+  }
+
+  console.log("");
+  console.log(editors[editor]());
+  console.log("");
+}
+
+function doctorCheck() {
+  console.log(cyan + bold + "\n  CodexMono Doctor\n" + reset);
+  const targetDir = getSystemFontDir();
+  let problems = 0;
+
+  if (!targetDir) {
+    console.log(red + `  ✗ Unsupported platform: ${platform}` + reset);
+    process.exit(1);
+  }
+
+  const dirExists = fs.existsSync(targetDir);
+  console.log(
+    (dirExists ? green + "  ✓" : yellow + "  !") +
+      ` system font dir: ${targetDir}` +
+      (dirExists ? "" : " (created on first install)") +
+      reset,
+  );
+
+  ["core", "nerd", "hermes"].forEach((fam) => {
+    const entries = fontGroups[fam].entries;
+    const installed = entries.filter((e) =>
+      fs.existsSync(path.join(targetDir, e.file)),
+    ).length;
+    const mark =
+      installed === entries.length
+        ? green + "  ✓"
+        : installed > 0
+          ? yellow + "  ◐"
+          : gray + "  ○";
+    console.log(
+      `${mark} ${fontGroups[fam].label}: ${installed}/${entries.length} installed` +
+        reset,
+    );
+  });
+
+  const checksums = parseChecksums();
+  let pkgMissing = 0;
+  let pkgBad = 0;
+  let pkgTotal = 0;
+  entriesFor("all").forEach((entry) => {
+    [entry.source, woff2SourceFor(entry)].forEach((src) => {
+      pkgTotal += 1;
+      const base = path.basename(src);
+      if (!fs.existsSync(src)) {
+        pkgMissing += 1;
+        return;
+      }
+      const exp = checksums[base];
+      if (exp && sha256File(src) !== exp) pkgBad += 1;
+    });
+  });
+  if (pkgMissing === 0 && pkgBad === 0) {
+    console.log(
+      green +
+        `  ✓ package integrity: ${pkgTotal}/${pkgTotal} files present and matching CHECKSUMS.md` +
+        reset,
+    );
+  } else {
+    console.log(
+      red +
+        `  ✗ package integrity: ${pkgMissing} missing, ${pkgBad} mismatched (run: codexmono verify all)` +
+        reset,
+    );
+    problems += 1;
+  }
+
+  if (platform === "linux") {
+    const { execFileSync } = require("child_process");
+    try {
+      execFileSync("which", ["fc-cache"], { stdio: "ignore" });
+      console.log(green + "  ✓ fontconfig (fc-cache) available" + reset);
+    } catch (_) {
+      console.log(
+        yellow + "  ! fontconfig (fc-cache) not found — installs may not register" + reset,
+      );
+    }
+  }
+
+  if (dirExists) {
+    const known = new Set(entriesFor("all").map((e) => e.file));
+    const stray = fs
+      .readdirSync(targetDir)
+      .filter((f) => /^CodexMono.*\.(ttf|otf)$/i.test(f) && !known.has(f));
+    if (stray.length) {
+      console.log(
+        yellow +
+          `  ! ${stray.length} non-bundled CodexMono font(s) in system dir: ${stray.join(", ")}` +
+          reset,
+      );
+    } else {
+      console.log(green + "  ✓ no stray/foreign CodexMono fonts in system dir" + reset);
+    }
+  }
+
+  console.log("");
+  if (problems === 0) {
+    console.log(green + bold + "  Healthy. No critical problems.\n" + reset);
+  } else {
+    console.log(red + bold + `  ${problems} problem(s) need attention.\n` + reset);
+    process.exit(1);
+  }
+}
+
+// --- Minimal self-contained TrueType cmap reader (no native deps) ---
+function locateCmap(buf) {
+  if (!buf || buf.length < 12) return null;
+  const numTables = buf.readUInt16BE(4);
+  let cmapOff = 0;
+  for (let i = 0; i < numTables; i += 1) {
+    const rec = 12 + i * 16;
+    if (buf.toString("latin1", rec, rec + 4) === "cmap") {
+      cmapOff = buf.readUInt32BE(rec + 8);
+      break;
+    }
+  }
+  if (!cmapOff || cmapOff + 4 > buf.length) return null;
+
+  const numSub = buf.readUInt16BE(cmapOff + 2);
+  let best = null;
+  let bestScore = -1;
+  for (let i = 0; i < numSub; i += 1) {
+    const rec = cmapOff + 4 + i * 8;
+    const platformID = buf.readUInt16BE(rec);
+    const encodingID = buf.readUInt16BE(rec + 2);
+    const subOffset = cmapOff + buf.readUInt32BE(rec + 4);
+    if (subOffset + 2 > buf.length) continue;
+    const format = buf.readUInt16BE(subOffset);
+    if (format !== 4 && format !== 12) continue;
+    let score = 0;
+    if (platformID === 3 && encodingID === 10) score = 5;
+    else if (platformID === 0 && encodingID >= 4) score = 4;
+    else if (platformID === 3 && encodingID === 1) score = 3;
+    else if (platformID === 0) score = 2;
+    if (format === 12) score += 1;
+    if (score > bestScore) {
+      bestScore = score;
+      best = { subOffset, format };
+    }
+  }
+  return best;
+}
+
+function cmapHas(buf, loc, cp) {
+  if (!loc) return false;
+  if (loc.format === 12) {
+    const off = loc.subOffset;
+    const nGroups = buf.readUInt32BE(off + 12);
+    let lo = 0;
+    let hi = nGroups - 1;
+    while (lo <= hi) {
+      const mid = (lo + hi) >> 1;
+      const g = off + 16 + mid * 12;
+      const startC = buf.readUInt32BE(g);
+      const endC = buf.readUInt32BE(g + 4);
+      if (cp < startC) hi = mid - 1;
+      else if (cp > endC) lo = mid + 1;
+      else return true;
+    }
+    return false;
+  }
+  if (loc.format === 4) {
+    if (cp > 0xffff) return false;
+    const off = loc.subOffset;
+    const segX2 = buf.readUInt16BE(off + 6);
+    const segCount = segX2 / 2;
+    const endO = off + 14;
+    const startO = endO + segX2 + 2;
+    const deltaO = startO + segX2;
+    const rangeO = deltaO + segX2;
+    for (let s = 0; s < segCount; s += 1) {
+      const end = buf.readUInt16BE(endO + s * 2);
+      if (cp > end) continue;
+      const start = buf.readUInt16BE(startO + s * 2);
+      if (cp < start) return false;
+      const delta = buf.readUInt16BE(deltaO + s * 2);
+      const rangeOffset = buf.readUInt16BE(rangeO + s * 2);
+      let glyph;
+      if (rangeOffset === 0) {
+        glyph = (cp + delta) & 0xffff;
+      } else {
+        const gi = rangeO + s * 2 + rangeOffset + (cp - start) * 2;
+        if (gi + 1 >= buf.length) return false;
+        glyph = buf.readUInt16BE(gi);
+        if (glyph !== 0) glyph = (glyph + delta) & 0xffff;
+      }
+      return glyph !== 0;
+    }
+    return false;
+  }
+  return false;
+}
+
+function loadCmaps(entries) {
+  return entries
+    .map((entry) => {
+      const m = metaByFile[entry.file] || {};
+      let buf = null;
+      let loc = null;
+      try {
+        buf = fs.readFileSync(entry.source);
+        loc = locateCmap(buf);
+      } catch (_) {
+        buf = null;
+      }
+      return { file: entry.file, family: m.name || entry.file, loc, buf };
+    })
+    .filter((x) => x.buf && x.loc);
+}
+
+function parseCodepoint(arg) {
+  const m = /^(?:u\+|0x)([0-9a-f]{1,6})$/i.exec(arg);
+  if (m) return parseInt(m[1], 16);
+  return arg.codePointAt(0);
+}
+
+function fmtCp(cp) {
+  return "U+" + cp.toString(16).toUpperCase().padStart(4, "0");
+}
+
+function whichChar(arg) {
+  if (!arg) {
+    console.log(red + "\n  Usage: codexmono which <char|U+XXXX>\n" + reset);
+    process.exit(1);
+  }
+  const cp = parseCodepoint(arg);
+  const ch = String.fromCodePoint(cp);
+  const fonts = loadCmaps(entriesFor("all"));
+  const hits = fonts.filter((f) => cmapHas(f.buf, f.loc, cp));
+
+  if (jsonOut) {
+    console.log(
+      JSON.stringify(
+        { input: arg, codepoint: fmtCp(cp), char: ch, covered_by: hits.map((h) => h.file) },
+        null,
+        2,
+      ),
+    );
+    return;
+  }
+
+  console.log(cyan + bold + `\n  which "${ch}"  (${fmtCp(cp)})\n` + reset);
+  if (hits.length === 0) {
+    console.log(yellow + "  Not covered by any bundled family.\n" + reset);
+    return;
+  }
+  hits.forEach((h) => console.log(green + `  ✓ ${h.file}` + reset));
+  console.log("");
+}
+
+function charsCoverage(text) {
+  if (!text) {
+    console.log(red + "\n  Usage: codexmono chars <text>\n" + reset);
+    process.exit(1);
+  }
+  const fonts = loadCmaps(entriesFor("all"));
+  const rows = [...text].map((ch) => {
+    const cp = ch.codePointAt(0);
+    const covered = fonts.filter((f) => cmapHas(f.buf, f.loc, cp)).map((f) => f.file);
+    return { char: ch, codepoint: fmtCp(cp), count: covered.length, covered };
+  });
+
+  if (jsonOut) {
+    console.log(JSON.stringify(rows, null, 2));
+    return;
+  }
+
+  console.log(
+    cyan + bold + `\n  Character coverage (${fonts.length} bundled fonts)\n` + reset,
+  );
+  rows.forEach((r) => {
+    const mark =
+      r.count === fonts.length
+        ? green + "✓"
+        : r.count > 0
+          ? yellow + "◐"
+          : red + "✗";
+    console.log(`  ${mark} ${r.char}  ${gray}${r.codepoint}${reset}  ${r.count}/${fonts.length} fonts`);
+  });
+  console.log("");
+}
+
 switch (command) {
   case "install":
     installFonts(rawTarget);
@@ -784,6 +1151,22 @@ switch (command) {
 
   case "verify":
     verifyFonts(rawTarget);
+    break;
+
+  case "config":
+    configFor(rawTarget, rawTarget2);
+    break;
+
+  case "doctor":
+    doctorCheck();
+    break;
+
+  case "which":
+    whichChar(rawTarget);
+    break;
+
+  case "chars":
+    charsCoverage(rawTarget);
     break;
 
   case "--help":
