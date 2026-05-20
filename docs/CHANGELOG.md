@@ -8,6 +8,17 @@ Format based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 
+### Added
+- `initiate/` discovery layer (`initiate.md` + `initiate.json`) for OpenCLIs/agent discovery. The banner is monogrid Q.E.D verified. No `SKILL.md`: CodexMono is a passive font asset with no recurring autonomous trigger, so the `monogrid` validator carries the agent-facing skill and references codexmono via `pairs_with`.
+
+### Fixed
+- Aligned lagging version strings to the published package version (index.js, CSS comment, CHECKSUMS header were stuck at 1.0.2/1.0.3).
+
+## [1.0.4] - 2026-03-10
+
+### Changed
+- Republished as 1.0.4 (package version bump over 1.0.3; CLI behavior and font set unchanged).
+
 ## [1.0.3] - 2026-03-10
 
 ### Added
