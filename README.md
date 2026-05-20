@@ -309,6 +309,37 @@ The CLI will:
 - Install fonts to the correct system directory when you run `install`
 - Let you check status with `codexmono list all`
 
+### CLI Commands
+
+```bash
+codexmono                       # command hub (this guide)
+codexmono install <target>      # install a family (default: core)
+codexmono uninstall [target]    # remove a family (default: all)
+codexmono list [target]         # install status (default: all)
+codexmono info [target]         # family metadata: chars, size, paths (--json)
+codexmono path <target>         # print font file paths (--woff2 for web)
+codexmono css [target]          # print @font-face declarations
+codexmono verify [target]       # check SHA256 against CHECKSUMS.md (--json)
+codexmono config <editor>       # editor/terminal config snippet
+codexmono doctor                # diagnose install, integrity, stray fonts
+codexmono which <char|U+XXXX>   # which families cover a character (--json)
+codexmono chars <text>          # per-character coverage report (--json)
+codexmono version               # show CLI version
+```
+
+- **Targets:** `core` · `nerd` · `hermes` · `all`
+- **Flags:** `--json` (info, verify, which, chars) · `--woff2` (path)
+- **config editors:** vscode, kitty, alacritty, wezterm, ghostty, vim, neovim, iterm2, jetbrains, terminal
+
+```bash
+codexmono install all                    # all 12 families
+codexmono config vscode                  # VS Code settings snippet
+codexmono verify all                     # integrity check (24 files)
+codexmono which 😀                       # → Set of Hermes only
+codexmono chars "Hello 한글 ✓"           # coverage across families
+codexmono path core --woff2              # web asset paths
+```
+
 ### Manual Installation
 
 #### macOS
